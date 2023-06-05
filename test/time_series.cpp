@@ -28,6 +28,7 @@
 
 #include <chrono>
 #include <cmath>
+#include <stdexcept>
 
 
 using namespace std;
@@ -42,6 +43,16 @@ namespace risk_free_rate
 		const auto ts = time_series<double>{ { 2023y / January / 1d, 2023y / June / 5d } };
 
 		EXPECT_TRUE(isnan(ts[2023y / January / 1d]));
+	}
+
+	TEST(time_series, operator_square_brackets)
+	{
+		const auto ts = time_series<double>{ { 2023y / January / 1d, 2023y / June / 5d } };
+
+		EXPECT_TRUE(isnan(ts[2023y / January / 1d]));
+		EXPECT_TRUE(isnan(ts[2023y / June / 5d]));
+
+		EXPECT_THROW(ts[2023y / June / 6d], out_of_range);
 	}
 
 }
