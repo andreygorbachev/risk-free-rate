@@ -24,8 +24,10 @@
 
 #include <period.h>
 
+#include <chrono>
 #include <vector>
 #include <memory>
+#include <stdexcept>
 
 
 namespace risk_free_rate
