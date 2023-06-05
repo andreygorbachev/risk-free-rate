@@ -34,7 +34,6 @@
 namespace risk_free_rate
 {
 
-
 	template<typename T>
 	class time_series
 	{
