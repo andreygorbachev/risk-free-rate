@@ -22,6 +22,9 @@
 
 #pragma once
 
+#include <period.h>
+
+#include <memory>
 
 
 namespace risk_free_rate
@@ -29,6 +32,21 @@ namespace risk_free_rate
 
 	class resets
 	{
+
+	public:
+
+		explicit resets(calendar::days_period period) noexcept;
+
+	private:
+
+		calendar::days_period _period; // or should we consider not just daily resets?
+
 	};
+
+
+	resets::resets(calendar::days_period period) noexcept :
+		_period{ std::move(period) }
+	{
+	}
 
 }

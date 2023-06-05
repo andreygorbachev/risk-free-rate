@@ -22,7 +22,13 @@
 
 #include <resets.h>
 
+#include <period.h>
+
 #include <gtest/gtest.h>
+
+#include <chrono>
+
+using namespace std::chrono;
 
 
 namespace risk_free_rate
@@ -30,7 +36,7 @@ namespace risk_free_rate
 
 	TEST(resets, constructor)
 	{
-		const auto r = resets{};
+		const auto r = resets{ { 2023y / January / 1d, 2023y / June / 5d } };
 
 		EXPECT_EQ(1, 1);
 	}
