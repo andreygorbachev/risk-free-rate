@@ -24,6 +24,7 @@
 
 #include <period.h>
 
+#include <vector>
 #include <memory>
 
 
@@ -41,6 +42,10 @@ namespace risk_free_rate
 	private:
 
 		calendar::days_period _period; // or should we consider not just daily resets?
+
+	private:
+
+		std::vector<T> _observations;
 
 	};
 
