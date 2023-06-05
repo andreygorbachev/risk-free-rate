@@ -30,12 +30,13 @@
 namespace risk_free_rate
 {
 
-	class resets
+	template<typename T>
+	class time_series
 	{
 
 	public:
 
-		explicit resets(calendar::days_period period) noexcept;
+		explicit time_series(calendar::days_period period) noexcept;
 
 	private:
 
@@ -44,7 +45,9 @@ namespace risk_free_rate
 	};
 
 
-	resets::resets(calendar::days_period period) noexcept :
+
+	template<typename T>
+	time_series<T>::time_series(calendar::days_period period) noexcept :
 		_period{ std::move(period) }
 	{
 	}
