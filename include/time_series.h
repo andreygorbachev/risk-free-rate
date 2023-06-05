@@ -27,11 +27,13 @@
 #include <chrono>
 #include <vector>
 #include <memory>
+#include <limits>
 #include <stdexcept>
 
 
 namespace risk_free_rate
 {
+
 
 	template<typename T>
 	class time_series
@@ -41,13 +43,18 @@ namespace risk_free_rate
 
 		explicit time_series(calendar::days_period period) noexcept;
 
+	public:
+
+		auto operator[](const std::chrono::year_month_day& ymd) -> T&;
+		auto operator[](const std::chrono::year_month_day& ymd) const -> const T&;
+
 	private:
 
 		auto _index(const std::chrono::year_month_day& ymd) const -> std::size_t;
 
 	private:
 
-		calendar::days_period _period; // or should we consider not just daily resets?
+		calendar::days_period _period; // or should we consider other time steps (rather than just daily)?
 
 		std::vector<T> _observations;
 
@@ -58,8 +65,21 @@ namespace risk_free_rate
 	template<typename T>
 	time_series<T>::time_series(calendar::days_period period) noexcept :
 		_period{ std::move(period) },
-		_observations(_index(_period.get_until()) + 1/*uz*/)
+		_observations(_index(_period.get_until()) + 1/*uz*/, std::numeric_limits<T>::quiet_NaN())
 	{
+	}
+
+
+	template<typename T>
+	auto time_series<T>::operator[](const std::chrono::year_month_day& ymd) -> T&
+	{
+		return _observations[_index(ymd)];
+	}
+
+	template<typename T>
+	auto time_series<T>::operator[](const std::chrono::year_month_day& ymd) const -> const T&
+	{
+		return _observations[_index(ymd)];
 	}
 
 
