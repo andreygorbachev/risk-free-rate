@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include <resets.h>
+#include <time_series.h>
 
 #include <period.h>
 
@@ -34,7 +34,7 @@ using namespace std::chrono;
 namespace risk_free_rate
 {
 
-	TEST(resets, constructor)
+	TEST(time_series, constructor)
 	{
 		const auto r = resets{ { 2023y / January / 1d, 2023y / June / 5d } };
 

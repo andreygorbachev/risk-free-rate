@@ -9,7 +9,7 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(googletest)
 
 add_executable(${PROJECT_NAME}
-  resets.cpp
+  time_series.cpp
 )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
