@@ -38,7 +38,7 @@ namespace risk_free_rate
 	{
 		const auto r = time_series<double>{ { 2023y / January / 1d, 2023y / June / 5d } };
 
-		EXPECT_EQ(1, 1);
+		EXPECT_EQ(1, 1); // temp only
 	}
 
 }
