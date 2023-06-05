@@ -1,5 +1,7 @@
 # risk-free-rate
 
+Resets are expected to be setup once and read many times.
+
 
 [1] https://www.bankofengland.co.uk/markets/sonia-benchmark
 
