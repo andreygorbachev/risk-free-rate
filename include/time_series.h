@@ -41,9 +41,11 @@ namespace risk_free_rate
 
 	private:
 
-		calendar::days_period _period; // or should we consider not just daily resets?
+		auto _index(const std::chrono::year_month_day& ymd) const -> std::size_t;
 
 	private:
+
+		calendar::days_period _period; // or should we consider not just daily resets?
 
 		std::vector<T> _observations;
 
@@ -53,8 +55,20 @@ namespace risk_free_rate
 
 	template<typename T>
 	time_series<T>::time_series(calendar::days_period period) noexcept :
-		_period{ std::move(period) }
+		_period{ std::move(period) },
+		_observations(_index(_period.get_until()) + 1/*uz*/)
 	{
+	}
+
+
+	template<typename T>
+	auto time_series<T>::_index(const std::chrono::year_month_day& ymd) const -> std::size_t
+	{
+		if (ymd < _period.get_from() || ymd > _period.get_until())
+			throw std::out_of_range{ "Request is not consistent with from/until" };
+
+		const auto days = std::chrono::sys_days{ ymd } - std::chrono::sys_days{ _period.get_from() };
+		return days.count();
 	}
 
 }
