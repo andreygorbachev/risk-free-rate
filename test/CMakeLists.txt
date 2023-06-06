@@ -10,6 +10,7 @@ FetchContent_MakeAvailable(googletest)
 
 add_executable(${PROJECT_NAME}
   time_series.cpp
+  setup.h
 )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
@@ -20,4 +21,6 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 )
 
 include(GoogleTest)
-gtest_discover_tests(${PROJECT_NAME})
+gtest_discover_tests(${PROJECT_NAME}
+  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/data
+)
