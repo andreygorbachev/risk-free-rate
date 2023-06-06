@@ -71,7 +71,7 @@ namespace risk_free_rate
 		return dates_observations;
 	}
 
-	inline auto _make_from_until(const std::vector<std::pair<std::chrono::year_month_day, double>>& dates_observations) noexcept -> calendar::days_period
+	inline auto _make_from_until(const std::vector<std::pair<std::chrono::year_month_day, double>>& dates_observations) -> calendar::days_period
 	{
 		if (dates_observations.empty())
 			throw std::out_of_range{ "Dates/observations can't be empty" };
@@ -84,7 +84,7 @@ namespace risk_free_rate
 	{
 		/*const*/ auto fs = std::ifstream{ fileName };
 
-		const auto dates_observations = _parse_csv(fs); // or we can use one of the existing packages
+		const auto dates_observations = _parse_csv(fs); // or we can use one of the existing packages - why standard library does not have it?
 
 		auto from_until = _make_from_until(dates_observations);
 
