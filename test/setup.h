@@ -86,7 +86,7 @@ namespace risk_free_rate
 	{
 		/*const*/ auto fs = std::ifstream{ fileName };
 
-		const auto [dates, observations] = _parse_csv(fs);
+		const auto [dates, observations] = _parse_csv(fs); // or we can use one of the existing packages
 
 		auto from_until = _make_from_until(dates);
 
