@@ -43,13 +43,15 @@ namespace risk_free_rate
 	constexpr auto SONIA = "Bank of England  Database.csv";
 
 
-	inline auto _parse_csv(std::istream& fs) -> std::vector<std::pair<std::chrono::year_month_day, double>>
+	using DateObservation = std::pair<std::chrono::year_month_day, double>;
+
+	inline auto _parse_csv(std::istream& fs) -> std::vector<DateObservation>
 	{
 		// skip titles
 		auto t = std::string{};
 		std::getline(fs, t);
 
-		auto dates_observations = std::vector<std::pair<std::chrono::year_month_day, double>>{};
+		auto dates_observations = std::vector<DateObservation>{};
 
 		for (;;)
 		{
@@ -72,7 +74,7 @@ namespace risk_free_rate
 		return dates_observations;
 	}
 
-	inline auto _make_from_until(const std::vector<std::pair<std::chrono::year_month_day, double>>& dates_observations) -> calendar::days_period
+	inline auto _make_from_until(const std::vector<DateObservation>& dates_observations) -> calendar::days_period
 	{
 		if (dates_observations.empty())
 			throw std::out_of_range{ "Dates/observations can't be empty" };
