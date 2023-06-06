@@ -60,10 +60,10 @@ namespace risk_free_rate
 			std::chrono::from_stream(fs, "%d %m %y", d);
 
 			// get the observation
-			auto os = std::string{};
-			std::getline(fs, os);
+			auto o = std::string{};
+			std::getline(fs, o);
 
-			dates_observations.emplace_back(std::move(d), std::stod(os));
+			dates_observations.emplace_back(std::move(d), std::stod(o));
 		}
 
 		return dates_observations;
