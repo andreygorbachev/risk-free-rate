@@ -53,12 +53,9 @@ namespace risk_free_rate
 
 		auto dates_observations = std::vector<DateObservation>{};
 
-		for (;;)
+		while (!fs.eof())
 		{
 			// get the date
-			auto ds = std::string{};
-			std::getline(fs, ds, ',');
-
 			auto d = std::chrono::year_month_day{};
 			std::chrono::from_stream(fs, "%d %m %y", d);
 
@@ -66,9 +63,7 @@ namespace risk_free_rate
 			auto os = std::string{};
 			std::getline(fs, os);
 
-			const auto o = std::stod(os);
-
-			dates_observations.emplace_back(std::move(d), o);
+			dates_observations.emplace_back(std::move(d), std::stod(os));
 		}
 
 		return dates_observations;
