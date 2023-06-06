@@ -21,7 +21,18 @@
 // SOFTWARE.
 
 
+#include "time_series.h"
+
+#include <period.h>
+
 #include <fstream>
+#include <vector>
+#include <chrono>
+#include <stdexcept>
+#include <tuple>
+#include <string>
+#include <istream>
+#include <memory>
 
 
 namespace risk_free_rate
@@ -29,5 +40,60 @@ namespace risk_free_rate
 
 	// from https://www.bankofengland.co.uk/markets/sonia-benchmark
 	constexpr auto SONIA = "Bank of England  Database.csv";
+
+
+	inline auto _parse_csv(std::istream& fs) -> std::tuple<std::vector<std::chrono::year_month_day>, std::vector<double>>
+	{
+		// skip titles
+		auto t = std::string{};
+		std::getline(fs, t);
+
+		auto dates = std::vector<std::chrono::year_month_day>{};
+		auto observations = std::vector<double>{};
+
+		for (;;)
+		{
+			// get the date
+			auto ds = std::string{};
+			std::getline(fs, ds, ',');
+
+			auto d = std::chrono::year_month_day{};
+			std::chrono::from_stream(fs, "%d %m %y", d);
+
+			// get the observation
+			auto os = std::string{};
+			std::getline(fs, os);
+
+			const auto o = std::stod(os);
+
+			dates.push_back(d);
+			observations.push_back(o);
+		}
+
+		return { std::move(dates), std::move(observations) };
+	}
+
+	inline auto _make_from_until(const std::vector<std::chrono::year_month_day>& dates) noexcept -> calendar::days_period
+	{
+		if (dates.empty())
+			throw std::out_of_range{ "Dates can't be empty" };
+
+		return { dates.front(), dates.back() };
+	}
+
+
+	inline auto parse_csv(const std::string& fileName) -> time_series<double>
+	{
+		/*const*/ auto fs = std::ifstream{ fileName };
+
+		const auto [dates, observations] = _parse_csv(fs);
+
+		auto from_until = _make_from_until(dates);
+
+		return time_series<double>{
+			std::move(from_until),
+		};
+		// at the moment unpopulated
+	}
 
 }
