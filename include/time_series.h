@@ -40,6 +40,15 @@ namespace risk_free_rate
 
 	public:
 
+		time_series() noexcept = delete; // or we'll have to figure out what an "empty" time_series is (especially as there is no default constructor for days_period)
+		time_series(const time_series&) = default;
+		time_series(time_series&&) noexcept = default;
+
+		~time_series() noexcept = default;
+
+		time_series& operator=(const time_series&) = default;
+		time_series& operator=(time_series&&) noexcept = default;
+
 		explicit time_series(calendar::days_period period) noexcept;
 
 	public:
