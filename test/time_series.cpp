@@ -45,7 +45,7 @@ namespace risk_free_rate
 		EXPECT_TRUE(isnan(ts[2023y / January / 1d]));
 	}
 
-	TEST(time_series, operator_square_brackets)
+	TEST(time_series, operator_square_brackets1)
 	{
 		const auto ts = time_series<double>{ { 2023y / January / 1d, 2023y / June / 5d } };
 
@@ -53,6 +53,14 @@ namespace risk_free_rate
 		EXPECT_TRUE(isnan(ts[2023y / June / 5d]));
 
 		EXPECT_THROW(ts[2023y / June / 6d], out_of_range);
+	}
+
+	TEST(time_series, operator_square_brackets2)
+	{
+		auto ts = time_series<double>{ { 2023y / January / 1d, 2023y / June / 5d } };
+		ts[2023y / January / 3d] = 3.4269;
+
+		EXPECT_DOUBLE_EQ(3.4269, ts[2023y / January / 3d]);
 	}
 
 }
