@@ -29,7 +29,7 @@
 #include <vector>
 #include <chrono>
 #include <stdexcept>
-#include <tuple>
+#include <utility>
 #include <string>
 #include <istream>
 #include <memory>
@@ -42,14 +42,13 @@ namespace risk_free_rate
 	constexpr auto SONIA = "Bank of England  Database.csv";
 
 
-	inline auto _parse_csv(std::istream& fs) -> std::tuple<std::vector<std::chrono::year_month_day>, std::vector<double>>
+	inline auto _parse_csv(std::istream& fs) -> std::vector<std::pair<std::chrono::year_month_day, double>>
 	{
 		// skip titles
 		auto t = std::string{};
 		std::getline(fs, t);
 
-		auto dates = std::vector<std::chrono::year_month_day>{};
-		auto observations = std::vector<double>{};
+		auto dates_observations = std::vector<std::pair<std::chrono::year_month_day, double>>{};
 
 		for (;;)
 		{
@@ -66,19 +65,18 @@ namespace risk_free_rate
 
 			const auto o = std::stod(os);
 
-			dates.push_back(d);
-			observations.push_back(o);
+			dates_observations.emplace_back(std::move(d), o);
 		}
 
-		return { std::move(dates), std::move(observations) };
+		return dates_observations;
 	}
 
-	inline auto _make_from_until(const std::vector<std::chrono::year_month_day>& dates) noexcept -> calendar::days_period
+	inline auto _make_from_until(const std::vector<std::pair<std::chrono::year_month_day, double>>& dates_observations) noexcept -> calendar::days_period
 	{
-		if (dates.empty())
-			throw std::out_of_range{ "Dates can't be empty" };
+		if (dates_observations.empty())
+			throw std::out_of_range{ "Dates/observations can't be empty" };
 
-		return { dates.front(), dates.back() };
+		return { dates_observations.front().first, dates_observations.back().first };
 	}
 
 
@@ -86,14 +84,18 @@ namespace risk_free_rate
 	{
 		/*const*/ auto fs = std::ifstream{ fileName };
 
-		const auto [dates, observations] = _parse_csv(fs); // or we can use one of the existing packages
+		const auto dates_observations = _parse_csv(fs); // or we can use one of the existing packages
 
-		auto from_until = _make_from_until(dates);
+		auto from_until = _make_from_until(dates_observations);
 
-		return time_series<double>{
+		auto ts = time_series<double>{
 			std::move(from_until),
 		};
-		// at the moment unpopulated
+
+		for (const auto& d_o : dates_observations)
+			ts[d_o.first] = d_o.second;
+
+		return ts;
 	}
 
 }
