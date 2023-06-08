@@ -54,7 +54,7 @@ namespace risk_free_rate
 
 		storage _ts;
 
-		unsigned _dp;
+		unsigned _dp; // or maybe as the _ts is expected to be already rounded we do not need to keep a separate rounding info here?
 
 	};
 
