@@ -21,8 +21,14 @@
 // SOFTWARE.
 
 #include <resets.h>
+#include <time_series.h>
 
 #include <gtest/gtest.h>
+
+#include <chrono>
+
+
+using namespace std::chrono;
 
 
 namespace risk_free_rate
@@ -30,7 +36,9 @@ namespace risk_free_rate
 
 	TEST(resets, constructor)
 	{
-		const auto rs = resets{};
+		const auto ts = time_series<double>{ { 2023y / January / 1d, 2023y / June / 5d } };
+
+		const auto rs = resets{ ts, 4u };
 
 		EXPECT_TRUE(true);
 	}

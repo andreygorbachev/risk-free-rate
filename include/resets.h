@@ -25,6 +25,7 @@
 #include "time_series.h"
 
 #include <cmath>
+#include <memory>
 
 
 namespace risk_free_rate
@@ -40,6 +41,27 @@ namespace risk_free_rate
 
 	class resets
 	{
+
+	public:
+
+		using storage = time_series<double>; // or should we consider some ratio? (s.t. rounding would not be needed)
+
+	public:
+
+		explicit resets(storage ts, unsigned dp);
+
+	private:
+
+		storage _ts;
+
+		unsigned _dp;
+
 	};
+
+
+
+	inline resets::resets(storage ts, unsigned dp) : _ts{ std::move(ts) }, _dp{ dp }
+	{
+	}
 
 }
