@@ -24,9 +24,19 @@
 
 #include "time_series.h"
 
+#include <cmath>
+
 
 namespace risk_free_rate
 {
+
+	inline auto round(const double x, const unsigned decimal_places) -> double
+	{
+		const auto p = std::pow(10.0, decimal_places);
+		return std::round(x * p) / p;
+	}
+
+
 
 	class resets
 	{
