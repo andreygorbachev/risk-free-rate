@@ -40,7 +40,8 @@ namespace risk_free_rate
 {
 
 	// from https://www.bankofengland.co.uk/markets/sonia-benchmark
-	constexpr auto SONIA = "Bank of England  Database.csv";
+	constexpr auto SONIA = "SONIA.csv";
+	constexpr auto SONIACompoundedIndex = "SONIA_compounded_index.csv";
 
 
 	using DateObservation = std::pair<std::chrono::year_month_day, double>;
