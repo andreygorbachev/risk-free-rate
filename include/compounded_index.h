@@ -24,12 +24,30 @@
 
 #include "resets.h"
 
+#include <chrono>
+#include <memory>
+
 
 namespace risk_free_rate
 {
 
 	class compounded_index
 	{
+
+	public:
+
+		explicit compounded_index(std::chrono::year_month_day from);
+
+	private:
+
+		std::chrono::year_month_day _from;
+
 	};
+
+
+
+	inline compounded_index::compounded_index(std::chrono::year_month_day from) : _from{ std::move(from) }
+	{
+	}
 
 }
