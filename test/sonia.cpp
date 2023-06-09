@@ -37,8 +37,9 @@ namespace risk_free_rate
 
 	TEST(sonia, compounded_index)
 	{
-		const auto sonia = parse_csv(SONIA);
-		const auto sonia_compounded_index = parse_csv(SONIACompoundedIndex);
+		const auto expected = parse_csv(SONIACompoundedIndex);
+
+		const auto resets = parse_csv(SONIA);
 
 		EXPECT_TRUE(true);
 	}
