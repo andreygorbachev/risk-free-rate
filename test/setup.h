@@ -60,15 +60,17 @@ namespace risk_free_rate
 	inline auto _make_from_until(const rapidcsv::Document& csv) -> calendar::days_period
 	{
 		const auto size = csv.GetRowCount();
-		if (size == 0u)
-			return { {}, {} };
-		else
+		if (size != 0u)
 		{
 			// we expect observations to be stored in decreasing order (in time)
 			auto from = csv.GetCell<std::chrono::year_month_day>(0u, size - 1u);
 			auto until = csv.GetCell<std::chrono::year_month_day>(0u, 0u);
 
 			return { std::move(from), std::move(until) };
+		}
+		else
+		{
+			return { {}, {} };
 		}
 	}
 
