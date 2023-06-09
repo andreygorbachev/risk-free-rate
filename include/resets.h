@@ -24,6 +24,8 @@
 
 #include "time_series.h"
 
+#include <day_count_interface.h>
+
 #include <cmath>
 #include <memory>
 
@@ -31,6 +33,7 @@
 namespace risk_free_rate
 {
 
+	// maybe not the right place for this function
 	inline auto round(const double x, const unsigned decimal_places) -> double
 	{
 		const auto p = std::pow(10.0, decimal_places);
@@ -46,21 +49,25 @@ namespace risk_free_rate
 
 		using storage = time_series<double>; // or should we consider some ratio? (s.t. rounding would not be needed)
 
+		using day_count = std::unique_ptr < coupon_schedule::day_count>;
+
 	public:
 
-		explicit resets(storage ts, unsigned dp);
+		explicit resets(storage ts, day_count dc);
 
 	private:
 
 		storage _ts;
 
-		unsigned _dp; // or maybe as the _ts is expected to be already rounded we do not need to keep a separate rounding info here?
+		day_count _dc;
 
 	};
 
 
 
-	inline resets::resets(storage ts, unsigned dp) : _ts{ std::move(ts) }, _dp{ dp }
+	inline resets::resets(storage ts, day_count dc) :
+		_ts{ std::move(ts) },
+		_dc{ std::move(dc) }
 	{
 	}
 

@@ -23,10 +23,15 @@
 #include <resets.h>
 #include <time_series.h>
 
+#include <day_counts.h>
+
 #include <gtest/gtest.h>
 
 #include <chrono>
+#include <memory>
 
+
+using namespace coupon_schedule;
 
 using namespace std::chrono;
 
@@ -38,7 +43,7 @@ namespace risk_free_rate
 	{
 		const auto ts = time_series<double>{ { 2023y / January / 1d, 2023y / June / 5d } };
 
-		const auto rs = resets{ ts, 4u };
+		const auto rs = resets{ ts, std::make_unique<actual_365_fixed>() }; // do we want to use Actual365Fixed?
 
 		EXPECT_TRUE(true);
 	}
