@@ -26,15 +26,26 @@
 
 #include <period.h>
 
-#include <fstream>
-#include <vector>
+#include <rapidcsv.h>
+
 #include <chrono>
-#include <stdexcept>
-#include <utility>
 #include <string>
-#include <istream>
+#include <sstream>
 #include <memory>
-#include <cstddef>
+
+
+namespace rapidcsv
+{
+
+	template<>
+	void Converter<std::chrono::year_month_day>::ToVal(const std::string& str, std::chrono::year_month_day& val) const
+	{
+		std::istringstream ss{ str };
+
+		ss >> std::chrono::parse("%2d %b %2y", val);
+	}
+
+}
 
 
 namespace risk_free_rate
@@ -45,60 +56,33 @@ namespace risk_free_rate
 	constexpr auto SONIACompoundedIndex = "SONIA_compounded_index.csv";
 	// daily rounding to 18 decimal places would need more thinking
 
-	using DateObservation = std::pair<std::chrono::year_month_day, double>;
 
-	inline auto _parse_csv(std::istream& fs) -> std::vector<DateObservation>
+	inline auto _make_from_until(const rapidcsv::Document& csv) -> calendar::days_period
 	{
-		using namespace std;
+		// we expect the observations to be stored in decreasing in time order
+		auto from = csv.GetCell<std::chrono::year_month_day>(0u, csv.GetRowCount() - 1u);
+		auto until = csv.GetCell<std::chrono::year_month_day>(0u, 0u);
 
-		// skip titles
-		auto t = string{};
-		getline(fs, t);
-
-		auto dates_observations = vector<DateObservation>{};
-
-		while (!fs.eof())
-		{
-			// get the date
-			auto d = chrono::year_month_day{};
-			chrono::from_stream(fs, "\"%2d %b %2y\",", d); // this is locale dependent - so needs more work
-
-			// get the observation
-			auto o = string{};
-			getline(fs, o);
-			// please note that o stars and ends with ", so lets remove them
-//			o = o.substr(1uz, o.length() - 2uz);
-			o = o.substr(1u, o.length() - 2u);
-
-			dates_observations.emplace_back(move(d), stod(o));
-		}
-
-		return dates_observations;
-	}
-
-	inline auto _make_from_until(const std::vector<DateObservation>& dates_observations) -> calendar::days_period
-	{
-		if (dates_observations.empty())
-			throw std::out_of_range{ "Dates/observations can't be empty" };
-
-		return { dates_observations.front().first, dates_observations.back().first };
+		return { std::move(from), std::move(until) };
 	}
 
 
 	inline auto parse_csv(const std::string& fileName) -> time_series<double>
 	{
-		/*const*/ auto fs = std::ifstream{ fileName };
+		const auto csv = rapidcsv::Document(fileName);
 
-		const auto dates_observations = _parse_csv(fs); // or we can use one of the existing packages - why standard library does not have it?
-
-		auto from_until = _make_from_until(dates_observations);
+		auto from_until = _make_from_until(csv);
 
 		auto ts = time_series<double>{
 			std::move(from_until),
 		};
 
-		for (const auto& d_o : dates_observations)
-			ts[d_o.first] = d_o.second;
+		for (auto i = 0u; i < csv.GetRowCount(); ++i)
+		{
+			const auto date = csv.GetCell<std::chrono::year_month_day>(0u, i);
+			const auto observation = csv.GetCell<double>(1u, i);
+			ts[date] = observation;
+		}
 
 		return ts;
 	}
