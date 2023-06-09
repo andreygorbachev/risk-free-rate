@@ -34,6 +34,7 @@
 #include <string>
 #include <istream>
 #include <memory>
+#include <cstddef>
 
 
 namespace risk_free_rate
@@ -48,23 +49,28 @@ namespace risk_free_rate
 
 	inline auto _parse_csv(std::istream& fs) -> std::vector<DateObservation>
 	{
-		// skip titles
-		auto t = std::string{};
-		std::getline(fs, t);
+		using namespace std;
 
-		auto dates_observations = std::vector<DateObservation>{};
+		// skip titles
+		auto t = string{};
+		getline(fs, t);
+
+		auto dates_observations = vector<DateObservation>{};
 
 		while (!fs.eof())
 		{
 			// get the date
-			auto d = std::chrono::year_month_day{};
-			std::chrono::from_stream(fs, "%d %m %y", d);
+			auto d = chrono::year_month_day{};
+			chrono::from_stream(fs, "\"%2d %b %2y\",", d); // this is locale dependent - so needs more work
 
 			// get the observation
-			auto o = std::string{};
-			std::getline(fs, o);
+			auto o = string{};
+			getline(fs, o);
+			// please note that o stars and ends with ", so lets remove them
+//			o = o.substr(1uz, o.length() - 2uz);
+			o = o.substr(1u, o.length() - 2u);
 
-			dates_observations.emplace_back(std::move(d), std::stod(o));
+			dates_observations.emplace_back(move(d), stod(o));
 		}
 
 		return dates_observations;

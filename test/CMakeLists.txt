@@ -12,6 +12,7 @@ add_executable(${PROJECT_NAME}
   time_series.cpp
   resets.cpp
   compounded_index.cpp
+  sonia.cpp
   setup.h
 )
 
