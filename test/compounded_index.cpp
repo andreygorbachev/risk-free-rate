@@ -35,7 +35,7 @@ namespace risk_free_rate
 
 	TEST(compounded_index, constructor)
 	{
-		const auto ci = compounded_index{ 2018y / April / 23d }; // daily rounding to 18 decimal places would need more thinking
+		const auto ci = compounded_index{ 2018y / April / 23d };
 
 		EXPECT_TRUE(true);
 	}
