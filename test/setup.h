@@ -59,7 +59,7 @@ namespace risk_free_rate
 
 	inline auto _make_from_until(const rapidcsv::Document& csv) -> calendar::days_period
 	{
-		// we expect the observations to be stored in decreasing in time order
+		// we expect observations to be stored in decreasing order (in time)
 		auto from = csv.GetCell<std::chrono::year_month_day>(0u, csv.GetRowCount() - 1u);
 		auto until = csv.GetCell<std::chrono::year_month_day>(0u, 0u);
 
@@ -81,6 +81,7 @@ namespace risk_free_rate
 		{
 			const auto date = csv.GetCell<std::chrono::year_month_day>(0u, i);
 			const auto observation = csv.GetCell<double>(1u, i);
+
 			ts[date] = observation;
 		}
 
