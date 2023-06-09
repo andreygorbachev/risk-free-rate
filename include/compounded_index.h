@@ -38,9 +38,15 @@ namespace risk_free_rate
 
 		explicit compounded_index(std::chrono::year_month_day from);
 
+	public:
+
+		auto value(const std::chrono::year_month_day& ymd) const -> double; // noexcept?
+
 	private:
 
 		std::chrono::year_month_day _from;
+
+		// we should be able to cache results here
 
 	};
 
@@ -48,6 +54,12 @@ namespace risk_free_rate
 
 	inline compounded_index::compounded_index(std::chrono::year_month_day from) : _from{ std::move(from) }
 	{
+	}
+
+
+	inline auto compounded_index::value(const std::chrono::year_month_day& ymd) const -> double
+	{
+		return 100.0; // temp only
 	}
 
 }
