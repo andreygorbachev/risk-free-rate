@@ -75,7 +75,7 @@ namespace risk_free_rate
 
 	inline auto parse_csv(const std::string& fileName) -> time_series<double>
 	{
-		const auto csv = rapidcsv::Document(fileName); // we epect titles
+		const auto csv = rapidcsv::Document(fileName); // we expect titles
 
 		auto from_until = _make_from_until(csv);
 
