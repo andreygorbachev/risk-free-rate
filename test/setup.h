@@ -59,17 +59,23 @@ namespace risk_free_rate
 
 	inline auto _make_from_until(const rapidcsv::Document& csv) -> calendar::days_period
 	{
-		// we expect observations to be stored in decreasing order (in time)
-		auto from = csv.GetCell<std::chrono::year_month_day>(0u, csv.GetRowCount() - 1u);
-		auto until = csv.GetCell<std::chrono::year_month_day>(0u, 0u);
+		const auto size = csv.GetRowCount();
+		if (size == 0u)
+			return { {}, {} };
+		else
+		{
+			// we expect observations to be stored in decreasing order (in time)
+			auto from = csv.GetCell<std::chrono::year_month_day>(0u, size - 1u);
+			auto until = csv.GetCell<std::chrono::year_month_day>(0u, 0u);
 
-		return { std::move(from), std::move(until) };
+			return { std::move(from), std::move(until) };
+		}
 	}
 
 
 	inline auto parse_csv(const std::string& fileName) -> time_series<double>
 	{
-		const auto csv = rapidcsv::Document(fileName);
+		const auto csv = rapidcsv::Document(fileName); // we epect titles
 
 		auto from_until = _make_from_until(csv);
 
@@ -77,8 +83,10 @@ namespace risk_free_rate
 			std::move(from_until),
 		};
 
-		for (auto i = 0u; i < csv.GetRowCount(); ++i)
+		const auto size = csv.GetRowCount();
+		for (auto i = 0u; i < size; ++i)
 		{
+			// we expect each row to contain date,observation
 			const auto date = csv.GetCell<std::chrono::year_month_day>(0u, i);
 			const auto observation = csv.GetCell<double>(1u, i);
 
