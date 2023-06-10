@@ -33,41 +33,39 @@
 namespace risk_free_rate
 {
 
-	// maybe not the right place for this function
-	inline auto round(const double x, const unsigned decimal_places) -> double
-	{
-		const auto p = std::pow(10.0, decimal_places);
-		return std::round(x * p) / p;
-	}
-
-
-
 	class resets
 	{
 
 	public:
 
-		using storage = time_series<double>; // or should we consider some ratio? (s.t. rounding would not be needed)
-
-		using day_count = std::unique_ptr < coupon_schedule::day_count>;
+		using storage = time_series<double>; // or should we consider some ratio? (s.t. rounding would be explicit)
 
 	public:
 
-		explicit resets(storage ts, day_count dc);
+		resets() noexcept = delete;
+		resets(const resets&) = default;
+		resets(resets&&) noexcept = default;
+
+		~resets() noexcept = default;
+
+		resets& operator=(const resets&) = default;
+		resets& operator=(resets&&) noexcept = default;
+
+		explicit resets(storage ts, const coupon_schedule::day_count* dc);
 
 	private:
 
 		storage _ts;
 
-		day_count _dc;
+		const coupon_schedule::day_count* _dc;
 
 	};
 
 
 
-	inline resets::resets(storage ts, day_count dc) :
+	inline resets::resets(storage ts, const coupon_schedule::day_count* dc) :
 		_ts{ std::move(ts) },
-		_dc{ std::move(dc) }
+		_dc{ dc }
 	{
 	}
 

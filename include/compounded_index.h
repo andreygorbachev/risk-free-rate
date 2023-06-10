@@ -31,6 +31,19 @@
 namespace risk_free_rate
 {
 
+	inline auto round(const double x, const unsigned decimal_places) -> double
+	{
+		const auto p = std::pow(10.0, decimal_places);
+		return std::round(x * p) / p;
+	}
+
+
+	inline auto make_compounded_index(const resets& r, std::chrono::year_month_day from) -> resets
+	{
+		return r; // temp only
+	}
+
+
 	class compounded_index
 	{
 
