@@ -53,6 +53,10 @@ namespace risk_free_rate
 
 	public:
 
+		friend auto operator==(const time_series& ts1, const time_series& ts2) noexcept -> bool = default;
+
+	public:
+
 		auto operator[](const std::chrono::year_month_day& ymd) -> T&;
 		auto operator[](const std::chrono::year_month_day& ymd) const -> const T&;
 

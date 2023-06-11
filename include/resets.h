@@ -53,6 +53,11 @@ namespace risk_free_rate
 
 		explicit resets(storage ts, const coupon_schedule::day_count* dc);
 
+	public:
+
+		auto get_time_series() const noexcept -> const storage&;
+		auto get_day_count() const noexcept -> const coupon_schedule::day_count*;
+
 	private:
 
 		storage _ts;
@@ -67,6 +72,18 @@ namespace risk_free_rate
 		_ts{ std::move(ts) },
 		_dc{ dc }
 	{
+	}
+
+
+
+	inline auto resets::get_time_series() const noexcept -> const storage&
+	{
+		return _ts;
+	}
+
+	inline auto resets::get_day_count() const noexcept -> const coupon_schedule::day_count*
+	{
+		return _dc;
 	}
 
 }

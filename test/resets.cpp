@@ -33,6 +33,7 @@
 
 using namespace coupon_schedule;
 
+using namespace std;
 using namespace std::chrono;
 
 
@@ -41,11 +42,14 @@ namespace risk_free_rate
 
 	TEST(resets, constructor)
 	{
-		const auto ts = time_series<double>{ { 2023y / January / 1d, 2023y / June / 5d } };
+		auto ts = time_series<double>{ { 2023y / January / 1d, 2023y / June / 5d } };
 
-		const auto rs = resets{ ts, &Actual365Fixed };
+		const auto rs = resets{ move(ts), &Actual365Fixed };
 
-		EXPECT_TRUE(true);
+		const auto expected1 = time_series<double>{ { 2023y / January / 1d, 2023y / June / 5d } };
+		const auto expected2 = &Actual365Fixed;
+//		EXPECT_EQ(expected1, rs.get_time_series());
+		EXPECT_EQ(expected2, rs.get_day_count());
 	}
 
 }
