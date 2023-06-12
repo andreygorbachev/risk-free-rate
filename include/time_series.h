@@ -27,7 +27,6 @@
 #include <chrono>
 #include <vector>
 #include <memory>
-#include <limits>
 #include <stdexcept>
 
 
@@ -77,7 +76,7 @@ namespace risk_free_rate
 	template<typename T>
 	time_series<T>::time_series(calendar::days_period period) noexcept :
 		_period{ std::move(period) },
-		_observations(_index(_period.get_until()) + 1/*uz*/, std::numeric_limits<T>::quiet_NaN())
+		_observations(_index(_period.get_until()) + 1/*uz*/)
 	{
 	}
 

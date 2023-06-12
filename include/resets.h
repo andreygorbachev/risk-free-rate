@@ -28,6 +28,7 @@
 
 #include <cmath>
 #include <memory>
+#include <optional>
 
 
 namespace risk_free_rate
@@ -38,7 +39,7 @@ namespace risk_free_rate
 
 	public:
 
-		using storage = time_series<double>; // or should we consider some ratio? (s.t. rounding would be explicit)
+		using storage = time_series<std::optional<double>>; // or should we consider some ratio? (s.t. rounding would be explicit)
 
 	public:
 
