@@ -66,7 +66,19 @@ namespace risk_free_rate
 		);
 
 		const auto expected = parse_csv(SONIACompoundedIndex);
-		EXPECT_EQ(expected, ci.get_time_series());
+		for (auto d = expected.get_period().get_from();
+			d <= expected.get_period().get_until();
+			d = sys_days{ d } + days{ 1 }
+		)
+		{
+			const auto& o = ci.get_time_series()[d];
+
+			const auto& e = expected[d];
+			if (e)
+				EXPECT_DOUBLE_EQ(*e, *o);
+			else
+				EXPECT_FALSE(o);
+		}
 	}
 
 }
