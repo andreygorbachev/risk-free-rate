@@ -49,7 +49,6 @@ using namespace std::chrono;
 
 namespace risk_free_rate
 {
-
 	TEST(sonia, make_compounded_index)
 	{
 		auto ts = parse_csv(SONIA);
