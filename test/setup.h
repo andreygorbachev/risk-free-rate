@@ -100,4 +100,8 @@ namespace risk_free_rate
 		return ts;
 	}
 
+
+	// from https://www.gov.uk/bank-holidays
+	constexpr auto EnglandAndWalesICS = "england-and-wales.ics";
+
 }

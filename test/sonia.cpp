@@ -31,6 +31,7 @@
 #include <weekend.h>
 #include <schedule.h>
 #include <calendar.h>
+#include <parser.h>
 
 #include <gtest/gtest.h>
 
@@ -57,7 +58,7 @@ namespace risk_free_rate
 		const auto from = 2018y / April / 23d;
 		const auto publication = calendar::calendar{
 			calendar::SaturdaySundayWeekend,
-			calendar::schedule{ calendar::period{ 2023y / June / 1d, 2023y / June / 2d }, {} }
+			calendar::parser::parse_ics(EnglandAndWalesICS)
 		};
 		const auto ci = make_compounded_index(
 			r,
