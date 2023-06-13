@@ -78,7 +78,12 @@ namespace risk_free_rate
 
 		auto from_until = calendar::days_period{ std::move(from), std::move(until) };
 
-		return r; // temp only
+		const auto day_count = r.get_day_count();
+
+		auto result = resets::storage{ std::move(from_until) };
+		result[from] = index;
+
+		return resets{ std::move(result), day_count }; // we assume that resets day count and index day count are the same
 	}
 
 
