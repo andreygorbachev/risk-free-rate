@@ -34,7 +34,7 @@ namespace risk_free_rate
 {
 
 	template<typename T>
-	class time_series
+	class time_series // or should we use an existing library like tslib (GitHub)?
 	{
 
 	public:
