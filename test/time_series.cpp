@@ -30,6 +30,8 @@
 #include <stdexcept>
 
 
+using namespace calendar;
+
 using namespace std;
 using namespace std::chrono;
 
@@ -41,8 +43,8 @@ namespace risk_free_rate
 	{
 		const auto ts = time_series<double>{ { 2023y / January / 1d, 2023y / June / 5d } };
 
-		const auto expected = double{};
-		EXPECT_DOUBLE_EQ(expected, ts[2023y / January / 1d]);
+		const auto expected = days_period{ 2023y / January / 1d, 2023y / June / 5d };
+		EXPECT_EQ(expected, ts.get_period());
 	}
 
 	TEST(time_series, operator_square_brackets1)

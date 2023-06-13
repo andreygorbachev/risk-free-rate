@@ -59,6 +59,10 @@ namespace risk_free_rate
 		auto operator[](const std::chrono::year_month_day& ymd) -> T&;
 		auto operator[](const std::chrono::year_month_day& ymd) const -> const T&;
 
+	public:
+
+		auto get_period() const noexcept -> const calendar::days_period&;
+
 	private:
 
 		auto _index(const std::chrono::year_month_day& ymd) const -> std::size_t;
@@ -91,6 +95,13 @@ namespace risk_free_rate
 	auto time_series<T>::operator[](const std::chrono::year_month_day& ymd) const -> const T&
 	{
 		return _observations[_index(ymd)];
+	}
+
+
+	template<typename T>
+	auto time_series<T>::get_period() const noexcept -> const calendar::days_period&
+	{
+		return _period;
 	}
 
 
