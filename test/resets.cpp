@@ -53,4 +53,16 @@ namespace risk_free_rate
 		EXPECT_EQ(expected2, rs.get_day_count());
 	}
 
+	TEST(resets, operator_square_brackets)
+	{
+		auto ts = time_series<optional<double>>{ { 2023y / January / 1d, 2023y / June / 5d } };
+		ts[2023y / January / 3d] = 3.4269;
+
+		const auto rs = resets{ move(ts), &Actual365Fixed };
+
+		EXPECT_DOUBLE_EQ(0.034269, rs[2023y / January / 3d]);
+
+		EXPECT_THROW(rs[2023y / January / 1d], out_of_range);
+	}
+
 }

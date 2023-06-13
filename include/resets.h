@@ -29,10 +29,18 @@
 #include <cmath>
 #include <memory>
 #include <optional>
+#include <stdexcept>
 
 
 namespace risk_free_rate
 {
+
+	inline auto from_percent(const double val) noexcept -> double // is there a standard way to do this?
+	{
+		return val / 100.0;
+	}
+
+
 
 	class resets
 	{
@@ -56,6 +64,11 @@ namespace risk_free_rate
 
 	public:
 
+		auto operator[](const std::chrono::year_month_day& ymd) const -> double;
+		// this also converts from percentages and throws an exception for missing resets - is it what we want?
+
+	public:
+
 		auto get_time_series() const noexcept -> const storage&;
 		auto get_day_count() const noexcept -> const coupon_schedule::day_count*;
 
@@ -75,6 +88,16 @@ namespace risk_free_rate
 	{
 	}
 
+
+
+	inline auto resets::operator[](const std::chrono::year_month_day& ymd) const -> double
+	{
+		const auto o = _ts[ymd];
+		if (o)
+			return from_percent(*o);
+		else
+			throw std::out_of_range{ "Request is not consistent with publication calendar" };
+	}
 
 
 	inline auto resets::get_time_series() const noexcept -> const storage&

@@ -65,23 +65,35 @@ namespace risk_free_rate
 
 		// at the moment we do not protect against resets (incorrectly) provided for non-business days
 		// (they are just ignored in these calculations)
+		// is this an issue for the last reset?
 
-		auto index = 100.0; // for now we assume that all indices start with 100.0
+		const auto last_reset_ymd = r.get_time_series().get_period().get_until();
 
 		// resets are stored based on effective date of the rate (not a publication date, which is the next business day)
 		// but compounded index is published for the maturity of the last rate participating in the calculation of the index
 		// hence we need to use publication_calendar to add 1 business day to the latest reset date
-		auto until = make_overnight_maturity(
-			r.get_time_series().get_period().get_until(),
-			publication
-		);
+		auto until = make_overnight_maturity(last_reset_ymd, publication);
 
 		auto from_until = calendar::days_period{ std::move(from), std::move(until) };
 
+		auto result = resets::storage{ std::move(from_until) };
+
 		const auto day_count = r.get_day_count();
 
-		auto result = resets::storage{ std::move(from_until) };
-		result[from] = index;
+		auto index = 100.0; // for now we assume that all indices start with 100.0
+
+		for (auto d = from; d <= last_reset_ymd;)
+		{
+			result[d] = round(index, 8u); // for now we assume that all compounded indices are rounded to 8 decimal places;
+			// I also read it as "only the final result is rounded" (no rounding on each step of the calculation)
+
+			const auto effective = d;
+			const auto maturity = make_overnight_maturity(d, publication);
+
+			index *= 1.0 + r[effective] * day_count->fraction({ effective, maturity });
+
+			d = maturity;
+		}
 
 		return resets{ std::move(result), day_count }; // we assume that resets day count and index day count are the same
 	}
