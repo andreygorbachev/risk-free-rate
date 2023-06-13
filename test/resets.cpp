@@ -65,4 +65,15 @@ namespace risk_free_rate
 		EXPECT_THROW(rs[2023y / January / 1d], out_of_range);
 	}
 
+
+	TEST(resets, from_percent)
+	{
+		EXPECT_DOUBLE_EQ(0.01, from_percent(1.0));
+	}
+
+	TEST(resets, to_percent)
+	{
+		EXPECT_DOUBLE_EQ(1.0, to_percent(0.01));
+	}
+
 }

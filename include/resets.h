@@ -40,6 +40,11 @@ namespace risk_free_rate
 		return val / 100.0;
 	}
 
+	inline auto to_percent(const double val) noexcept -> double // is there a standard way to do this?
+	{
+		return val * 100.0;
+	}
+
 
 
 	class resets
