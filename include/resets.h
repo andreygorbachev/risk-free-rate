@@ -35,12 +35,12 @@
 namespace risk_free_rate
 {
 
-	inline auto from_percent(const double val) noexcept -> double // is there a standard way to do this?
+	constexpr auto from_percent(const double val) noexcept -> double // is there a standard way to do this?
 	{
 		return val / 100.0;
 	}
 
-	inline auto to_percent(const double val) noexcept -> double // is there a standard way to do this?
+	constexpr auto to_percent(const double val) noexcept -> double // is there a standard way to do this?
 	{
 		return val * 100.0;
 	}
