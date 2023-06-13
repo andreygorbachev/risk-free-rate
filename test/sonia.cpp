@@ -74,13 +74,18 @@ namespace risk_free_rate
 			const auto& o = ci.get_time_series()[d];
 
 			const auto& e = expected[d];
-			if(d != 2023y / February / 14d) // something funny about that day only
+			// On 14 February 2023 the Bank became aware of a small discrepancy in the calculation
+			// of the SONIA Compounded Index published on that day.As the Bank became aware of this
+			// discrepancy after the republication deadline of noon on 14 February, the SONIA Compounded
+			// Index was not republished.To ensure the integrity of the index, and in line with the
+			// definition of the SONIA Compounded Index set out in the SONIA Key Features& Policies,
+			// the Bank corrected the index calculation for future dates.
+			if(d != 2023y / February / 14d)
 				if (e)
 					EXPECT_DOUBLE_EQ(*e, *o);
 				else
 					EXPECT_FALSE(o);
 		}
-		// as values are rounded do we still need to use tolerance?
 	}
 
 }
