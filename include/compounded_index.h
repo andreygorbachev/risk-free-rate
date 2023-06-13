@@ -40,13 +40,18 @@ namespace risk_free_rate
 	}
 
 
-	inline auto make_compounded_index(const resets& r, std::chrono::year_month_day from) -> resets
+	inline auto make_compounded_index(
+		const resets& r,
+		std::chrono::year_month_day from
+	) -> resets
 	{
 		// for now we assume that "from" exists in r (which is probably what all real cases do)
 
 		auto index = 100.0; // for now we assume that all indices start with 100.0
 
-		auto from_until = calendar::days_period{ std::move(from), r.get_time_series().get_period().get_until() }; // we should have 1 more day for the index
+		auto until = r.get_time_series().get_period().get_until(); // we should have 1 more day for the index
+
+		auto from_until = calendar::days_period{ std::move(from), std::move(until) };
 
 		return r; // temp only
 	}
