@@ -64,7 +64,7 @@ namespace risk_free_rate
 		// for now we assume that "from" exists in r (which is probably what all real cases do)
 
 		// at the moment we do not protect against resets (incorrectly) provided for non-business days
-		// (they are just ignored in these calcaultions)
+		// (they are just ignored in these calculations)
 
 		auto index = 100.0; // for now we assume that all indices start with 100.0
 
