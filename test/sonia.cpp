@@ -27,6 +27,11 @@
 
 #include <day_counts.h>
 
+#include <period.h>
+#include <weekend.h>
+#include <schedule.h>
+#include <calendar.h>
+
 #include <gtest/gtest.h>
 
 #include <chrono>
@@ -34,6 +39,8 @@
 
 
 using namespace coupon_schedule;
+
+//using namespace calendar;
 
 using namespace std;
 using namespace std::chrono;
@@ -47,7 +54,16 @@ namespace risk_free_rate
 		auto ts = parse_csv(SONIA);
 
 		const auto r = resets{ move(ts), &Actual365Fixed };
-		const auto ci = make_compounded_index(r, 2018y / April / 23d);
+		const auto from = 2018y / April / 23d;
+		const auto publication_calendar = calendar::calendar{
+			calendar::SaturdaySundayWeekend,
+			calendar::schedule{ calendar::period{ 2023y / June / 1d, 2023y / June / 2d }, {} }
+		};
+		const auto ci = make_compounded_index(
+			r,
+			from,
+			publication_calendar
+		);
 
 		const auto expected = parse_csv(SONIACompoundedIndex);
 		EXPECT_EQ(expected, ci.get_time_series());

@@ -25,6 +25,7 @@
 #include "resets.h"
 
 #include <period.h>
+#include <business_day_conventions.h>
 
 #include <chrono>
 #include <memory>
@@ -42,14 +43,22 @@ namespace risk_free_rate
 
 	inline auto make_compounded_index(
 		const resets& r,
-		std::chrono::year_month_day from
+		std::chrono::year_month_day from,
+		const calendar::calendar& publication_calendar
 	) -> resets
 	{
 		// for now we assume that "from" exists in r (which is probably what all real cases do)
 
+		// at the moment we do not use publication_calendar to check for consistency with resets
+
 		auto index = 100.0; // for now we assume that all indices start with 100.0
 
-		auto until = r.get_time_series().get_period().get_until(); // we should have 1 more day for the index
+		// resets are stored based on effective date of the rate (not a publication date, which is the next business day)
+		// but compounded index is published for the maturity of the last rate participating in the calculation of the index
+		// hence we need to use publication_calendar to add 1 business day to the latest reset date
+		auto until = r.get_time_series().get_period().get_until();
+		until = std::chrono::sys_days{ until } + std::chrono::days{ 1 };
+		until = calendar::Following.adjust(until, publication_calendar);
 
 		auto from_until = calendar::days_period{ std::move(from), std::move(until) };
 
