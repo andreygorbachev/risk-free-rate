@@ -22,26 +22,35 @@
 
 #include "setup.h"
 
+#include <resets.h>
 #include <compounded_index.h>
+
+#include <day_counts.h>
 
 #include <gtest/gtest.h>
 
 #include <chrono>
+#include <memory>
 
 
+using namespace coupon_schedule;
+
+using namespace std;
 using namespace std::chrono;
 
 
 namespace risk_free_rate
 {
 
-	TEST(sonia, compounded_index)
+	TEST(sonia, make_compounded_index)
 	{
+		auto ts = parse_csv(SONIA);
+
+		const auto r = resets{ move(ts), &Actual365Fixed };
+		const auto ci = make_compounded_index(r, 2018y / April / 23d);
+
 		const auto expected = parse_csv(SONIACompoundedIndex);
-
-		const auto resets = parse_csv(SONIA);
-
-		EXPECT_TRUE(true);
+		EXPECT_EQ(expected, ci.get_time_series());
 	}
 
 }

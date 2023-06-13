@@ -23,6 +23,7 @@
 #pragma once
 
 #include "time_series.h"
+#include "resets.h"
 
 #include <period.h>
 
@@ -32,6 +33,7 @@
 #include <string>
 #include <sstream>
 #include <memory>
+#include <optional>
 
 
 namespace rapidcsv
@@ -75,13 +77,13 @@ namespace risk_free_rate
 	}
 
 
-	inline auto parse_csv(const std::string& fileName) -> time_series<double>
+	inline auto parse_csv(const std::string& fileName) -> resets::storage
 	{
 		const auto csv = rapidcsv::Document(fileName); // we expect titles
 
 		auto from_until = _make_from_until(csv);
 
-		auto ts = time_series<double>{
+		auto ts = resets::storage{
 			std::move(from_until),
 		};
 
