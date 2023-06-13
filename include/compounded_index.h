@@ -45,21 +45,20 @@ namespace risk_free_rate
 
 	inline auto make_overnight_maturity(
 		const std::chrono::year_month_day& effective,
-		const calendar::calendar& publication_calendar
+		const calendar::calendar& publication
 	) -> std::chrono::year_month_day
 	{
-		auto maturity = effective;
-		maturity = std::chrono::sys_days{ maturity } + std::chrono::days{ 1 };
-		maturity = calendar::Following.adjust(maturity, publication_calendar);
-
-		return maturity;
+		return calendar::Following.adjust(
+			std::chrono::sys_days{ effective } + std::chrono::days{ 1 },
+			publication
+		);
 	}
 
 
 	inline auto make_compounded_index(
 		const resets& r,
 		std::chrono::year_month_day from,
-		const calendar::calendar& publication_calendar
+		const calendar::calendar& publication
 	) -> resets
 	{
 		// for now we assume that "from" exists in r (which is probably what all real cases do)
@@ -74,7 +73,7 @@ namespace risk_free_rate
 		// hence we need to use publication_calendar to add 1 business day to the latest reset date
 		auto until = make_overnight_maturity(
 			r.get_time_series().get_period().get_until(),
-			publication_calendar
+			publication
 		);
 
 		auto from_until = calendar::days_period{ std::move(from), std::move(until) };

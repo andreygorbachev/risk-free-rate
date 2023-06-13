@@ -55,14 +55,14 @@ namespace risk_free_rate
 
 		const auto r = resets{ move(ts), &Actual365Fixed };
 		const auto from = 2018y / April / 23d;
-		const auto publication_calendar = calendar::calendar{
+		const auto publication = calendar::calendar{
 			calendar::SaturdaySundayWeekend,
 			calendar::schedule{ calendar::period{ 2023y / June / 1d, 2023y / June / 2d }, {} }
 		};
 		const auto ci = make_compounded_index(
 			r,
 			from,
-			publication_calendar
+			publication
 		);
 
 		const auto expected = parse_csv(SONIACompoundedIndex);
