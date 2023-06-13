@@ -22,10 +22,17 @@
 
 #include <compounded_index.h>
 
+#include <period.h>
+#include <weekend.h>
+#include <schedule.h>
+#include <calendar.h>
+
 #include <gtest/gtest.h>
 
 #include <chrono>
 
+
+//using namespace calendar;
 
 using namespace std::chrono;
 
@@ -45,6 +52,19 @@ namespace risk_free_rate
 		const auto ci = compounded_index{ 2018y / April / 23d };
 
 		EXPECT_DOUBLE_EQ(100.0, ci.value(2023y / June / 1d));
+	}
+
+	TEST(compounded_index, make_overnight_maturity)
+	{
+		const auto publication = calendar::calendar{
+			calendar::SaturdaySundayWeekend,
+			calendar::schedule{
+				calendar::period{ 2023y / May / 26d, 2023y / May / 30d },
+				{ 2023y / May / 29d }
+			}
+		};
+
+		EXPECT_EQ(2023y / May / 30d, make_overnight_maturity(2023y / May / 26d, publication));
 	}
 
 }
