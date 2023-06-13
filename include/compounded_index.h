@@ -81,16 +81,19 @@ namespace risk_free_rate
 		const auto day_count = r.get_day_count();
 
 		auto index = 100.0; // for now we assume that all indices start with 100.0
+		result[from] = index;
 
 		for (auto d = from; d <= last_reset_ymd;)
 		{
-			result[d] = round(index, 8u); // for now we assume that all compounded indices are rounded to 8 decimal places;
-			// I also read it as "only the final result is rounded" (no rounding on each step of the calculation)
-
 			const auto effective = d;
 			const auto maturity = make_overnight_maturity(d, publication);
+			const auto year_fraction = day_count->fraction({ effective, maturity });
 
-			index *= 1.0 + r[effective] * day_count->fraction({ effective, maturity });
+			index *= 1.0 + r[effective] * year_fraction;
+
+			// I need to find a better way of handling "not a rate" resets (at the moment we mix together rates and indices, which is not clean)
+			result[maturity] = round(index, 8u); // for now we assume that all compounded indices are rounded to 8 decimal places
+			// I also read it as "only the final result is rounded" (no rounding on each step of the calculation)
 
 			d = maturity;
 		}
