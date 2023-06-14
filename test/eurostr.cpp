@@ -61,7 +61,7 @@ namespace risk_free_rate
 		);
 
 		// from https://www.ecb.europa.eu/press/pr/date/2000/html/pr001214_4.en.html
-		const auto LaborDay = calendar::named_holiday{ std::chrono::May / std::chrono::day{ 1u } };
+		const auto LaborDay = calendar::named_holiday{ std::chrono::May / std::chrono::day{ 1u } }; // should it be in calendar?
 		auto rules = std::unordered_set<const calendar::annual_holiday*>{};
 		rules.insert(&calendar::NewYearsDay);
 		rules.insert(&calendar::GoodFriday);
