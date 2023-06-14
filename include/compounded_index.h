@@ -58,7 +58,8 @@ namespace risk_free_rate
 	inline auto make_compounded_index(
 		const resets& r,
 		std::chrono::year_month_day from,
-		const calendar::calendar& publication
+		const calendar::calendar& publication,
+		const double starting_value = 100.0 // alternatively we can rebalance everything for 1.0
 	) -> resets
 	{
 		// for now we assume that "from" exists in r (which is probably what all real cases do)
@@ -80,7 +81,7 @@ namespace risk_free_rate
 
 		const auto day_count = r.get_day_count();
 
-		auto index = 100.0; // for now we assume that all indices start with 100.0
+		auto index = starting_value;
 		result[from] = index;
 
 		for (auto d = from; d <= last_reset_ymd;)

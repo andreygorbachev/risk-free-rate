@@ -21,6 +21,7 @@ add_executable(${PROJECT_NAME}
   resets.cpp
   compounded_index.cpp
   sonia.cpp
+  sofr.cpp
   setup.h
 )
 
