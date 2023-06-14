@@ -44,7 +44,14 @@ namespace rapidcsv
 	{
 		auto ss = std::istringstream{ str };
 
-		ss >> std::chrono::parse("%2d %b %2y", val);
+		ss >> std::chrono::parse("%2d %b %2y", val); // SONIA
+
+		if (ss.rdstate() == std::ios_base::failbit)
+		{
+			ss = std::istringstream{ str };
+
+			ss >> std::chrono::parse("%Y-%2m-%2d", val); // EuroSTR
+		}
 	}
 
 }
