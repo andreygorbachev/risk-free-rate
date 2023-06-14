@@ -22,6 +22,7 @@ add_executable(${PROJECT_NAME}
   compounded_index.cpp
   sonia.cpp
   sofr.cpp
+  eurostr.cpp
   setup.h
 )
 

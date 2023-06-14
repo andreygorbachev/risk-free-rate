@@ -40,7 +40,7 @@ namespace rapidcsv
 {
 
 	template<>
-	void Converter<std::chrono::year_month_day>::ToVal(const std::string& str, std::chrono::year_month_day& val) const
+	inline void Converter<std::chrono::year_month_day>::ToVal(const std::string& str, std::chrono::year_month_day& val) const
 	{
 		auto ss = std::istringstream{ str };
 
@@ -57,6 +57,11 @@ namespace risk_free_rate
 	constexpr auto SONIA = "SONIA.csv";
 	constexpr auto SONIACompoundedIndex = "SONIA_compounded_index.csv";
 	// daily rounding to 18 decimal places would need more thinking
+
+
+	// from https://www.ecb.europa.eu/stats/financial_markets_and_interest_rates/euro_short-term_rate/html/index.en.html
+	constexpr auto EuroSTR = "EuroSTR.csv";
+	constexpr auto EuroSTRCompoundedIndex = "EuroSTR_compounded_index.csv";
 
 
 	inline auto _make_from_until(
