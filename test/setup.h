@@ -42,7 +42,7 @@ namespace rapidcsv
 	template<>
 	void Converter<std::chrono::year_month_day>::ToVal(const std::string& str, std::chrono::year_month_day& val) const
 	{
-		std::istringstream ss{ str };
+		auto ss = std::istringstream{ str };
 
 		ss >> std::chrono::parse("%2d %b %2y", val);
 	}
