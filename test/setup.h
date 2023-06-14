@@ -59,14 +59,17 @@ namespace risk_free_rate
 	// daily rounding to 18 decimal places would need more thinking
 
 
-	inline auto _make_from_until(const rapidcsv::Document& csv) -> calendar::days_period
+	inline auto _make_from_until(
+		const rapidcsv::Document& csv,
+		const std::string dateColumnName
+	) -> calendar::days_period
 	{
 		const auto size = csv.GetRowCount();
 		if (size != 0u)
 		{
 			// we expect observations to be stored in decreasing order (in time)
-			auto from = csv.GetCell<std::chrono::year_month_day>(0u, size - 1u);
-			auto until = csv.GetCell<std::chrono::year_month_day>(0u, 0u);
+			auto from = csv.GetCell<std::chrono::year_month_day>(dateColumnName, size - 1u);
+			auto until = csv.GetCell<std::chrono::year_month_day>(dateColumnName, 0u);
 
 			return { std::move(from), std::move(until) };
 		}
@@ -77,11 +80,15 @@ namespace risk_free_rate
 	}
 
 
-	inline auto parse_csv(const std::string& fileName) -> resets::storage
+	inline auto parse_csv(
+		const std::string& fileName,
+		const std::string& dateColumnName,
+		const std::string& observationColumnName
+	) -> resets::storage
 	{
 		const auto csv = rapidcsv::Document(fileName); // we expect titles
 
-		auto from_until = _make_from_until(csv);
+		auto from_until = _make_from_until(csv, dateColumnName);
 
 		auto ts = resets::storage{
 			std::move(from_until),
@@ -91,8 +98,8 @@ namespace risk_free_rate
 		for (auto i = 0u; i < size; ++i)
 		{
 			// we expect each row to contain date,observation
-			const auto date = csv.GetCell<std::chrono::year_month_day>(0u, i);
-			const auto observation = csv.GetCell<double>(1u, i);
+			const auto date = csv.GetCell<std::chrono::year_month_day>(dateColumnName, i);
+			const auto observation = csv.GetCell<double>(observationColumnName, i);
 
 			ts[date] = observation;
 		}

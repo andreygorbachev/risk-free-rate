@@ -52,7 +52,11 @@ namespace risk_free_rate
 
 	TEST(sonia, make_compounded_index)
 	{
-		auto ts = parse_csv(SONIA);
+		auto ts = parse_csv(
+			SONIA,
+			"Date"s,
+			"Daily Sterling overnight index average (SONIA) rate              [a] [b]             IUDSOIA"s
+		);
 
 		const auto r = resets{ move(ts), &Actual365Fixed };
 		const auto from = 2018y / April / 23d;
@@ -66,7 +70,11 @@ namespace risk_free_rate
 			publication
 		);
 
-		const auto expected = parse_csv(SONIACompoundedIndex);
+		const auto expected = parse_csv(
+			SONIACompoundedIndex,
+			"Date"s,
+			"SONIA Compounded Index              [a] [b] [c] [d]             IUDZOS2"s
+		);
 		for (auto d = expected.get_period().get_from();
 			d <= expected.get_period().get_until();
 			d = sys_days{ d } + days{ 1 }
