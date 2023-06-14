@@ -31,12 +31,14 @@
 #include <weekend.h>
 #include <schedule.h>
 #include <calendar.h>
+#include <annual_holidays.h>
 #include <parser.h>
 
 #include <gtest/gtest.h>
 
 #include <chrono>
 #include <memory>
+#include <unordered_set>
 
 
 using namespace coupon_schedule;
@@ -58,11 +60,25 @@ namespace risk_free_rate
 			"Volume-weighted trimmed mean rate"s
 		);
 
+		// from https://www.ecb.europa.eu/press/pr/date/2000/html/pr001214_4.en.html
+		const auto LaborDay = calendar::named_holiday{ std::chrono::May / std::chrono::day{ 1u } };
+		auto rules = std::unordered_set<const calendar::annual_holiday*>{};
+		rules.insert(&calendar::NewYearsDay);
+		rules.insert(&calendar::GoodFriday);
+		rules.insert(&calendar::EasterMonday);
+		rules.insert(&LaborDay);
+		rules.insert(&calendar::ChristmasDay);
+		rules.insert(&calendar::BoxingDay);
+		auto hs = calendar::make_holiday_schedule(
+			{ std::chrono::year{ 2019 }, std::chrono::year{ 2023 } },
+			rules
+		);
+
 		const auto r = resets{ move(ts), &Actual360 };
 		const auto from = 2019y / October / 1d;
 		const auto publication = calendar::calendar{
 			calendar::SaturdaySundayWeekend,
-			calendar::parser::parse_ics(EnglandAndWalesICS)
+			std::move(hs)
 		};
 		const auto ci = make_compounded_index(
 			r,
