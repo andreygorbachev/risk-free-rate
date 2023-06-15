@@ -56,8 +56,8 @@ namespace risk_free_rate
 	{
 		auto ts = parse_csv(
 			SARON,
-			""s,
-			""s
+			"Date"s,
+			"Swiss Average Rate ON"s
 		);
 
 		// from https://www.ecb.europa.eu/press/pr/date/2000/html/pr001214_4.en.html
@@ -93,8 +93,8 @@ namespace risk_free_rate
 
 		const auto expected = parse_csv(
 			SARONCompoundedIndex,
-			""s,
-			""s
+			"Date"s,
+			"SARON Index"s
 		);
 		EXPECT_EQ(expected, ci.get_time_series());
 	}
