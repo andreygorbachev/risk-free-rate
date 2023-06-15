@@ -23,6 +23,7 @@ add_executable(${PROJECT_NAME}
   sonia.cpp
   sofr.cpp
   eurostr.cpp
+  saron.cpp
   setup.h
 )
 
