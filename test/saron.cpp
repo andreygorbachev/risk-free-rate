@@ -99,4 +99,6 @@ namespace risk_free_rate
 		EXPECT_EQ(expected, ci.get_time_series());
 	}
 
+	// add tests for Swiss Current Rate ON
+
 }
