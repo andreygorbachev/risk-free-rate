@@ -65,11 +65,13 @@ namespace risk_free_rate
 			calendar::SaturdaySundayWeekend,
 			calendar::schedule{ index_period, {} }
 		};
+		const auto decimal_places = 8u;
 		const auto starting_value = 1.0;
 		const auto ci = make_compounded_index(
 			r,
 			from,
 			publication,
+			decimal_places,
 			starting_value
 		);
 

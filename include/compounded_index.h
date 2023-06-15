@@ -59,6 +59,7 @@ namespace risk_free_rate
 		const resets& r,
 		std::chrono::year_month_day from,
 		const calendar::calendar& publication,
+		const unsigned decimal_places,
 		const double starting_value = 100.0 // alternatively we can rebalance everything for 1.0
 	) -> resets
 	{
@@ -93,7 +94,7 @@ namespace risk_free_rate
 			index *= 1.0 + r[effective] * year_fraction;
 
 			// I need to find a better way of handling "not a rate" resets (at the moment we mix together rates and indices, which is not clean)
-			result[maturity] = round(index, 8u); // for now we assume that all compounded indices are rounded to 8 decimal places
+			result[maturity] = round(index, decimal_places);
 			// I also read it as "only the final result is rounded" (no rounding on each step of the calculation)
 
 			d = maturity;

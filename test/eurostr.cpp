@@ -80,10 +80,12 @@ namespace risk_free_rate
 			calendar::SaturdaySundayWeekend,
 			std::move(hs)
 		};
+		const auto decimal_places = 8u;
 		const auto ci = make_compounded_index(
 			r,
 			from,
-			publication
+			publication,
+			decimal_places
 		);
 
 		const auto expected = parse_csv(
