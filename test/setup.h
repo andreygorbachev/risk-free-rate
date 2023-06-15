@@ -71,6 +71,11 @@ namespace risk_free_rate
 	constexpr auto EuroSTRCompoundedIndex = "EuroSTR_compounded_index.csv";
 
 
+	// from https://www.six-group.com/en/products-services/the-swiss-stock-exchange/market-data/indices/swiss-reference-rates.html
+	constexpr auto SARON = "SARON.csv";
+	constexpr auto SARONCompoundedIndex = SARON;
+
+
 	inline auto _make_from_until(
 		const rapidcsv::Document& csv,
 		const std::string dateColumnName
