@@ -121,7 +121,7 @@ namespace risk_free_rate
 
 		const auto& last_reset_ymd = r.get_time_series().get_period().get_until();
 
-		// is this correct for "SARON"Swiss Current Rate ON" as well?
+		// is this correct for "Swiss Current Rate ON" as well?
 		// resets are stored based on effective date of the rate (not a publication date, which is the next business day)
 		// but compounded index is published for the maturity of the last rate participating in the calculation of the index
 		// hence we need to use publication_calendar to add 1 business day to the latest reset date
@@ -153,38 +153,6 @@ namespace risk_free_rate
 		}
 
 		return resets{ std::move(result), day_count }; // we assume that resets day count and index day count are the same
-	}
-
-
-	class compounded_index
-	{
-
-	public:
-
-		explicit compounded_index(std::chrono::year_month_day from);
-
-	public:
-
-		auto value(const std::chrono::year_month_day& ymd) const -> double; // noexcept?
-
-	private:
-
-		std::chrono::year_month_day _from;
-
-		// we should be able to cache results here
-
-	};
-
-
-
-	inline compounded_index::compounded_index(std::chrono::year_month_day from) : _from{ std::move(from) }
-	{
-	}
-
-
-	inline auto compounded_index::value(const std::chrono::year_month_day& ymd) const -> double
-	{
-		return 100.0; // temp only
 	}
 
 }

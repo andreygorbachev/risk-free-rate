@@ -40,20 +40,6 @@ using namespace std::chrono;
 namespace risk_free_rate
 {
 
-	TEST(compounded_index, constructor)
-	{
-		const auto ci = compounded_index{ 2018y / April / 23d };
-
-		EXPECT_TRUE(true);
-	}
-
-	TEST(compounded_index, value)
-	{
-		const auto ci = compounded_index{ 2018y / April / 23d };
-
-		EXPECT_DOUBLE_EQ(100.0, ci.value(2023y / June / 1d));
-	}
-
 	TEST(compounded_index, make_overnight_maturity)
 	{
 		const auto publication = calendar::calendar{
