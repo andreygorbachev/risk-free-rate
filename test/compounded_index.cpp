@@ -53,4 +53,9 @@ namespace risk_free_rate
 		EXPECT_EQ(2023y / May / 30d, make_overnight_maturity(2023y / May / 26d, publication));
 	}
 
+	TEST(compounded_index, round)
+	{
+		EXPECT_DOUBLE_EQ(1.01, round(1.011111, 2u));
+	}
+
 }
