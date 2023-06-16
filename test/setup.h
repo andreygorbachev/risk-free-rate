@@ -100,10 +100,18 @@ namespace risk_free_rate
 	inline auto parse_csv(
 		const std::string& fileName,
 		const std::string& dateColumnName,
-		const std::string& observationColumnName
+		const std::string& observationColumnName,
+		const char separator = ','
 	) -> resets::storage
 	{
-		const auto csv = rapidcsv::Document(fileName); // we expect titles
+		const auto csv = rapidcsv::Document(
+			fileName, 
+			rapidcsv::LabelParams(0u, -1), // we expect titles
+			rapidcsv::SeparatorParams(separator)
+		);
+		// at the moment we adjust the input files manually
+		// to make sure we have a simple and complete single row of titles
+		// (could it be done programatically here?)
 
 		auto from_until = _make_from_until(csv, dateColumnName);
 
