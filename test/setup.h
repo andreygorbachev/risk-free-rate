@@ -26,6 +26,10 @@
 #include "resets.h"
 
 #include <period.h>
+#include <weekend.h>
+#include <schedule.h>
+#include <calendar.h>
+#include <annual_holidays.h>
 
 #include <rapidcsv.h>
 
@@ -34,6 +38,7 @@
 #include <sstream>
 #include <memory>
 #include <optional>
+#include <unordered_set>
 
 
 namespace rapidcsv
@@ -142,5 +147,34 @@ namespace risk_free_rate
 
 	// from https://www.gov.uk/bank-holidays
 	constexpr auto EnglandAndWalesICS = "england-and-wales.ics";
+
+
+	inline auto make_SIX_holiday_schedule() -> calendar::schedule
+	{
+		// from https://www.six-group.com/en/products-services/the-swiss-stock-exchange/market-data/news-tools/trading-currency-holiday-calendar.html#/
+
+		const auto BerchtoldDay = calendar::offset_holiday<calendar::named_holiday>{ calendar::NewYearsDay, std::chrono::days{ 1 } };
+		const auto LaborDay = calendar::named_holiday{ std::chrono::May / std::chrono::day{ 1u } }; // should it be in calendar?
+		const auto NationalDay = calendar::named_holiday{ std::chrono::August / std::chrono::day{ 1u } };
+
+		auto rules = std::unordered_set<const calendar::annual_holiday*>{};
+		rules.insert(&calendar::NewYearsDay);
+		rules.insert(&BerchtoldDay);
+		rules.insert(&calendar::GoodFriday);
+		rules.insert(&calendar::EasterMonday);
+		rules.insert(&LaborDay);
+		rules.insert(&calendar::AscensionDay);
+		rules.insert(&calendar::Whitmonday);
+		rules.insert(&NationalDay);
+//		rules.insert(&calendar::ChristmasEve);
+		rules.insert(&calendar::ChristmasDay);
+		rules.insert(&calendar::BoxingDay); // should it be called it St. Stephen's Day?
+//		rules.insert(&calendar::NewYearsEve);
+
+		return calendar::make_holiday_schedule(
+			{ std::chrono::year{ 1999 }, std::chrono::year{ 2024 } },
+			rules
+		);
+	}
 
 }
