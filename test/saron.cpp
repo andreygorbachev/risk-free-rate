@@ -90,7 +90,7 @@ namespace risk_free_rate
 			std::move(hs)
 		};
 		const auto decimal_places = 6u;
-		const auto starting_value = 1'000.0;
+		const auto starting_value = 10'000.0;
 		const auto ci = make_compounded_index(
 			r,
 			from,
