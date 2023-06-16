@@ -52,6 +52,13 @@ namespace rapidcsv
 
 			ss >> std::chrono::parse("%Y-%2m-%2d", val); // EuroSTR
 		}
+
+		if (ss.rdstate() == std::ios_base::failbit)
+		{
+			ss = std::istringstream{ str };
+
+			ss >> std::chrono::parse("%2d.%2m.%Y", val); // SARON
+		}
 	}
 
 }
