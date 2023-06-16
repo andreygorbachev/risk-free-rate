@@ -74,10 +74,10 @@ namespace risk_free_rate
 		rules.insert(&calendar::AscensionDay);
 		rules.insert(&calendar::Whitmonday);
 		rules.insert(&NationalDay);
-		rules.insert(&calendar::ChristmasEve);
+//		rules.insert(&calendar::ChristmasEve);
 		rules.insert(&calendar::ChristmasDay);
 		rules.insert(&calendar::BoxingDay); // should it be called it St. Stephen's Day?
-		rules.insert(&calendar::NewYearsEve);
+//		rules.insert(&calendar::NewYearsEve);
 		auto hs = calendar::make_holiday_schedule(
 			{ std::chrono::year{ 1999 }, std::chrono::year{ 2024 } },
 			rules
