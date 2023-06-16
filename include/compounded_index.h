@@ -104,6 +104,58 @@ namespace risk_free_rate
 	}
 
 
+	// this needs further investigation (and a better name)
+	inline auto make_compounded_index2(
+		const resets& r,
+		std::chrono::year_month_day from,
+		const calendar::calendar& publication,
+		const unsigned decimal_places,
+		const double starting_value = 100.0 // alternatively we can rebalance everything for 1.0
+	) -> resets
+	{
+		// for now we assume that "from" exists in r (which is probably what all real cases do)
+
+		// at the moment we do not protect against resets (incorrectly) provided for non-business days
+		// (they are just ignored in these calculations)
+		// is this an issue for the last reset?
+
+		const auto& last_reset_ymd = r.get_time_series().get_period().get_until();
+
+		// is this correct for "SARON"Swiss Current Rate ON" as well?
+		// resets are stored based on effective date of the rate (not a publication date, which is the next business day)
+		// but compounded index is published for the maturity of the last rate participating in the calculation of the index
+		// hence we need to use publication_calendar to add 1 business day to the latest reset date
+		auto until = make_overnight_maturity(last_reset_ymd, publication);
+
+		auto from_until = calendar::days_period{ std::move(from), std::move(until) };
+
+		auto result = resets::storage{ std::move(from_until) };
+
+		const auto day_count = r.get_day_count();
+
+		auto index = starting_value;
+		result[from] = index;
+
+		for (auto d = from; d <= last_reset_ymd;)
+		{
+			const auto effective = d;
+			const auto maturity = make_overnight_maturity(d, publication);
+			const auto year_fraction = day_count->fraction({ effective, maturity });
+
+			index *= 1.0 + r[effective] * year_fraction;
+
+			index = round(index, decimal_places); // is this special to SARON only?
+
+			// I need to find a better way of handling "not a rate" resets (at the moment we mix together rates and indices, which is not clean)
+			result[maturity] = index;
+
+			d = maturity;
+		}
+
+		return resets{ std::move(result), day_count }; // we assume that resets day count and index day count are the same
+	}
+
+
 	class compounded_index
 	{
 

@@ -52,7 +52,7 @@ using namespace std::chrono;
 namespace risk_free_rate
 {
 
-	TEST(saron, make_compounded_index)
+	TEST(saron, make_compounded_index2)
 	{
 		auto ts = parse_csv(
 			SARON,
@@ -91,7 +91,7 @@ namespace risk_free_rate
 		};
 		const auto decimal_places = 6u;
 		const auto starting_value = 10'000.0;
-		const auto ci = make_compounded_index(
+		const auto ci = make_compounded_index2(
 			r,
 			from,
 			publication,
