@@ -93,6 +93,7 @@ namespace risk_free_rate
 			else
 				EXPECT_FALSE(o);
 		}
+		// factor out a comparison function?
 	}
 
 	TEST(saron, SwissCurrentRateON) // better name?
