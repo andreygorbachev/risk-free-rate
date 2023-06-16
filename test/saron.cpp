@@ -84,7 +84,7 @@ namespace risk_free_rate
 		);
 
 		const auto r = resets{ move(ts), &Actual360 };
-		const auto from = 2019y / October / 1d; // temp only
+		const auto from = 1999y / June / 30d;
 		const auto publication = calendar::calendar{
 			calendar::SaturdaySundayWeekend,
 			std::move(hs)
