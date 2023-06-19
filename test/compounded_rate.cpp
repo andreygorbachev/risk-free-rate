@@ -103,9 +103,14 @@ namespace risk_free_rate
 			{ { 2018y / April / 2d, 2018y / April / 2d }, 2018y / April / 2d },
 			c
 		);
+//		EXPECT_EQ(1.00000000, compound(schedule1, r)); // we need tolerance or rounding
 
-		EXPECT_EQ(1.00000000, compound(schedule1, r)); // we need tolerance or rounding
-//		expected[2018y / April / 3d] = 1.00005000;
+		const auto schedule2 = make_compounding_schedule(
+			{ { 2018y / April / 2d, 2018y / April / 3d }, 2018y / April / 3d },
+			c
+		);
+		EXPECT_EQ(1.00005000, compound(schedule2, r)); // we need tolerance or rounding
+
 //		expected[2018y / April / 4d] = 1.00010084;
 //		expected[2018y / April / 5d] = 1.00014917;
 //		expected[2018y / April / 6d] = 1.00019779;

@@ -56,14 +56,26 @@ namespace risk_free_rate
 
 
 
+	// should it be implemented via recursion as well? (so we can add one more priod if needed)
+	// (this might help with the index calcuation as well)
 	inline auto compound(const coupon_schedule::compounding_periods& periods, const resets& resets) -> double
 	{
-		const auto result = 1.0;
-		for (const auto& p : periods)
-			; // temp only
+		const auto dc = resets.get_day_count();
 
-		return result;
+		auto c = 1.0;
+		for (const auto& p : periods)
+			c *= 1.0 + resets[p._reset] * dc->fraction(p._period);
+
+		const auto full_period = calendar::period{
+			periods.front()._period.get_from(),
+			periods.back()._period.get_until()
+		};
+		// does it work for degenerate compounding schedules?
+
+		return (c - 1.0) / dc->fraction(full_period);
 	}
+	// maybe to move the average through time we can also undo an oldest period and then add a 1 new
+	// (but would it be the same thing numerically?)
 
 
 
