@@ -38,13 +38,15 @@
 namespace risk_free_rate
 {
 
-	inline auto make_effective(
+	template<typename T>
+	auto make_effective(
 		const std::chrono::year_month_day& maturity,
-		const calendar::calendar& publication
+		const calendar::calendar& publication,
+		const int offset // good name?
 	) -> std::chrono::year_month_day
 	{
 		return calendar::ModifiedPreceding.adjust(
-			maturity - std::chrono::months{ 3 }, // only 3 months for now
+			maturity - T{ offset },
 			publication
 		); // please note that 1w version needs Preceding
 	}
