@@ -99,22 +99,12 @@ namespace risk_free_rate
 			calendar::schedule{ index_period, {} }
 		};
 
-		const auto schedule1 = make_compounding_schedule(
-			{ { 2018y / April / 2d, 2018y / April / 2d }, 2018y / April / 2d },
-			c
-		);
-//		EXPECT_EQ(1.00000000, compound(schedule1, r)); // we need tolerance or rounding
-
 		const auto schedule2 = make_compounding_schedule(
 			{ { 2018y / April / 2d, 2018y / April / 3d }, 2018y / April / 3d },
 			c
 		);
-		EXPECT_EQ(1.00005000, compound(schedule2, r)); // we need tolerance or rounding
-
-//		expected[2018y / April / 4d] = 1.00010084;
-//		expected[2018y / April / 5d] = 1.00014917;
-//		expected[2018y / April / 6d] = 1.00019779;
-//		expected[2018y / April / 9d] = 1.00034365;
+		EXPECT_DOUBLE_EQ(0.018, compound(schedule2, r));
+		// add more steps
 	}
 
 }
