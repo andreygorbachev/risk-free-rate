@@ -22,6 +22,9 @@
 
 #include <compounded_rate.h>
 
+#include <day_counts.h>
+#include <compounding_schedule.h>
+
 #include <calendar.h>
 
 #include <gtest/gtest.h>
@@ -30,6 +33,7 @@
 
 
 //using namespace calendar;
+using namespace coupon_schedule;
 
 using namespace std::chrono;
 
@@ -79,7 +83,33 @@ namespace risk_free_rate
 
 	TEST(compounded_rate, compound)
 	{
+		const auto resets_period = calendar::period{ 2018y / April / 2d, 2018y / April / 6d };
+		const auto index_period = calendar::period{ 2018y / April / 2d, 2018y / April / 9d };
 
+		auto ts = resets::storage{ resets_period };
+		ts[2018y / April / 2d] = 1.80;
+		ts[2018y / April / 3d] = 1.83;
+		ts[2018y / April / 4d] = 1.74;
+		ts[2018y / April / 5d] = 1.75;
+		ts[2018y / April / 6d] = 1.75;
+
+		const auto r = resets{ move(ts), &Actual360 };
+		const auto c = calendar::calendar{
+			calendar::SaturdaySundayWeekend,
+			calendar::schedule{ index_period, {} }
+		};
+
+		const auto schedule1 = make_compounding_schedule(
+			{ { 2018y / April / 2d, 2018y / April / 2d }, 2018y / April / 2d },
+			c
+		);
+
+		EXPECT_EQ(1.00000000, compound(schedule1, r)); // we need tolerance or rounding
+//		expected[2018y / April / 3d] = 1.00005000;
+//		expected[2018y / April / 4d] = 1.00010084;
+//		expected[2018y / April / 5d] = 1.00014917;
+//		expected[2018y / April / 6d] = 1.00019779;
+//		expected[2018y / April / 9d] = 1.00034365;
 	}
 
 }
