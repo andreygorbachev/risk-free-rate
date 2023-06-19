@@ -18,8 +18,8 @@ FetchContent_MakeAvailable(googletest)
 
 add_executable(${PROJECT_NAME}
   time_series.cpp
+  round.cpp
   resets.cpp
-  compounded_index.cpp
   compounded_rate.cpp
   sonia.cpp
   sofr.cpp

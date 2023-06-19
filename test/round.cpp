@@ -20,21 +20,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include <compounded_index.h>
-
-#include <period.h>
-#include <weekend.h>
-#include <schedule.h>
-#include <calendar.h>
+#include <round.h>
 
 #include <gtest/gtest.h>
 
-#include <chrono>
-
-
-//using namespace calendar;
-
-using namespace std::chrono;
 
 
 namespace risk_free_rate
