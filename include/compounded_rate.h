@@ -38,6 +38,20 @@
 namespace risk_free_rate
 {
 
+	inline auto make_effective(
+		const std::chrono::year_month_day& maturity,
+		const calendar::calendar& publication
+	) -> std::chrono::year_month_day
+	{
+		return calendar::ModifiedPreceding.adjust(
+			maturity - std::chrono::months{ 3 }, // only 3 months for now
+			publication
+		); // please note that 1w version needs Preceding
+	}
+	// or should we do from/until instead of effective/maturity?
+	// are both there functions just an example of a relative date? (which might be better captured as a class)
+
+
 	inline auto make_compounded_rate(
 		const resets& r,
 		std::chrono::year_month_day from
