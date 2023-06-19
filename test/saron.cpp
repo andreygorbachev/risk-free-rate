@@ -89,7 +89,7 @@ namespace risk_free_rate
 
 			const auto& e = expected[d];
 			if (e)
-				EXPECT_DOUBLE_EQ(*e, *o);
+				EXPECT_EQ(*e, *o);
 			else
 				EXPECT_FALSE(o);
 		}
@@ -139,7 +139,7 @@ namespace risk_free_rate
 
 			const auto& e = expected[d];
 			if (e)
-				EXPECT_DOUBLE_EQ(*e, *o);
+				EXPECT_EQ(*e, *o);
 			else
 				EXPECT_FALSE(o);
 		}

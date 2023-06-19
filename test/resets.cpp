@@ -60,7 +60,7 @@ namespace risk_free_rate
 
 		const auto rs = resets{ move(ts), &Actual365Fixed };
 
-		EXPECT_DOUBLE_EQ(0.034269, rs[2023y / January / 3d]);
+		EXPECT_EQ(0.034269, rs[2023y / January / 3d]);
 
 		EXPECT_THROW(rs[2023y / January / 1d], out_of_range);
 	}
@@ -68,12 +68,12 @@ namespace risk_free_rate
 
 	TEST(resets, from_percent)
 	{
-		EXPECT_DOUBLE_EQ(0.01, from_percent(1.0));
+		EXPECT_EQ(0.01, from_percent(1.0));
 	}
 
 	TEST(resets, to_percent)
 	{
-		EXPECT_DOUBLE_EQ(1.0, to_percent(0.01));
+		EXPECT_EQ(1.0, to_percent(0.01));
 	}
 
 }

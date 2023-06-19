@@ -52,8 +52,8 @@ namespace risk_free_rate
 		const auto ts = time_series<double>{ { 2023y / January / 1d, 2023y / June / 5d } };
 
 		const auto expected = double{};
-		EXPECT_DOUBLE_EQ(expected, ts[2023y / January / 1d]);
-		EXPECT_DOUBLE_EQ(expected, ts[2023y / June / 5d]);
+		EXPECT_EQ(expected, ts[2023y / January / 1d]);
+		EXPECT_EQ(expected, ts[2023y / June / 5d]);
 
 		EXPECT_THROW(ts[2023y / June / 6d], out_of_range);
 	}
@@ -63,7 +63,7 @@ namespace risk_free_rate
 		auto ts = time_series<double>{ { 2023y / January / 1d, 2023y / June / 5d } };
 		ts[2023y / January / 3d] = 3.4269;
 
-		EXPECT_DOUBLE_EQ(3.4269, ts[2023y / January / 3d]);
+		EXPECT_EQ(3.4269, ts[2023y / January / 3d]);
 	}
 
 }

@@ -55,7 +55,7 @@ namespace risk_free_rate
 
 	TEST(compounded_index, round)
 	{
-		EXPECT_DOUBLE_EQ(1.01, round(1.011111, 2u));
+		EXPECT_EQ(1.01, round(1.011111, 2u));
 	}
 
 }

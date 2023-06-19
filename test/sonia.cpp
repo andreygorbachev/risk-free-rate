@@ -93,7 +93,7 @@ namespace risk_free_rate
 			// the Bank corrected the index calculation for future dates.
 			if(d != 2023y / February / 14d)
 				if (e)
-					EXPECT_DOUBLE_EQ(*e, *o);
+					EXPECT_EQ(*e, *o);
 				else
 					EXPECT_FALSE(o);
 		}
