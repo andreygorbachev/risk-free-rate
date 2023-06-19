@@ -25,6 +25,8 @@
 #include "time_series.h"
 #include "resets.h"
 
+#include <compounding_schedule.h>
+
 #include <period.h>
 #include <business_day_conventions.h>
 #include <calendar.h>
@@ -40,18 +42,6 @@ namespace risk_free_rate
 	{
 		const auto p = std::pow(10.0, decimal_places);
 		return std::round(x * p) / p;
-	}
-
-
-	inline auto make_overnight_maturity(
-		const std::chrono::year_month_day& effective,
-		const calendar::calendar& publication
-	) -> std::chrono::year_month_day
-	{
-		return calendar::Following.adjust(
-			std::chrono::sys_days{ effective } + std::chrono::days{ 1 },
-			publication
-		);
 	}
 
 
@@ -74,7 +64,7 @@ namespace risk_free_rate
 		// resets are stored based on effective date of the rate (not a publication date, which is the next business day)
 		// but compounded index is published for the maturity of the last rate participating in the calculation of the index
 		// hence we need to use publication_calendar to add 1 business day to the latest reset date
-		auto until = make_overnight_maturity(last_reset_ymd, publication);
+		auto until = coupon_schedule::make_overnight_maturity(last_reset_ymd, publication);
 
 		auto from_until = calendar::days_period{ std::move(from), std::move(until) };
 
@@ -88,7 +78,7 @@ namespace risk_free_rate
 		for (auto d = from; d <= last_reset_ymd;)
 		{
 			const auto effective = d;
-			const auto maturity = make_overnight_maturity(d, publication);
+			const auto maturity = coupon_schedule::make_overnight_maturity(d, publication);
 			const auto year_fraction = day_count->fraction({ effective, maturity });
 
 			index *= 1.0 + r[effective] * year_fraction;
@@ -125,7 +115,7 @@ namespace risk_free_rate
 		// resets are stored based on effective date of the rate (not a publication date, which is the next business day)
 		// but compounded index is published for the maturity of the last rate participating in the calculation of the index
 		// hence we need to use publication_calendar to add 1 business day to the latest reset date
-		auto until = make_overnight_maturity(last_reset_ymd, publication);
+		auto until = coupon_schedule::make_overnight_maturity(last_reset_ymd, publication);
 
 		auto from_until = calendar::days_period{ std::move(from), std::move(until) };
 
@@ -139,7 +129,7 @@ namespace risk_free_rate
 		for (auto d = from; d <= last_reset_ymd;)
 		{
 			const auto effective = d;
-			const auto maturity = make_overnight_maturity(d, publication);
+			const auto maturity = coupon_schedule::make_overnight_maturity(d, publication);
 			const auto year_fraction = day_count->fraction({ effective, maturity });
 
 			index *= 1.0 + r[effective] * year_fraction;

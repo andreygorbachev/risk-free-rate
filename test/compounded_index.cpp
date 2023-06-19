@@ -40,19 +40,6 @@ using namespace std::chrono;
 namespace risk_free_rate
 {
 
-	TEST(compounded_index, make_overnight_maturity)
-	{
-		const auto publication = calendar::calendar{
-			calendar::SaturdaySundayWeekend,
-			calendar::schedule{
-				calendar::period{ 2023y / May / 26d, 2023y / May / 30d },
-				{ 2023y / May / 29d }
-			}
-		};
-
-		EXPECT_EQ(2023y / May / 30d, make_overnight_maturity(2023y / May / 26d, publication));
-	}
-
 	TEST(compounded_index, round)
 	{
 		EXPECT_EQ(1.01, round(1.011111, 2u));
