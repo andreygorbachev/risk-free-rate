@@ -26,6 +26,7 @@
 #include "resets.h"
 
 #include <compounding_schedule.h>
+#include <coupon_period.h>
 
 #include <period.h>
 #include <business_day_conventions.h>
@@ -63,7 +64,12 @@ namespace risk_free_rate
 		const auto& last_reset_ymd = r.get_time_series().get_period().get_until();
 
 		const auto effective = make_effective<std::chrono::months>(last_reset_ymd, publication, 3);
+		const auto maturity = last_reset_ymd;
 		// at the moment a single rate, only for 3m
+
+		const auto coupon_period = coupon_schedule::coupon_period{ { effective, maturity }, maturity };
+
+		const auto schedule = coupon_schedule::make_compounding_schedule(coupon_period, publication);
 
 		return r; // temp only
 	}
