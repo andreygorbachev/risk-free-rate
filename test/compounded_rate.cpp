@@ -76,4 +76,10 @@ namespace risk_free_rate
 		EXPECT_EQ(2019y / January / 2d, make_effective<std::chrono::months>(2019y / February / 1d, publication, 1));
 	}
 
+
+	TEST(compounded_rate, compound)
+	{
+
+	}
+
 }

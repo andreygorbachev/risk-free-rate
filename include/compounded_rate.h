@@ -55,6 +55,18 @@ namespace risk_free_rate
 	// are both there functions just an example of a relative date? (which might be better captured as a class)
 
 
+
+	inline auto compound(const coupon_schedule::compounding_periods& periods, const resets& resets) -> double
+	{
+		const auto result = 1.0;
+		for (const auto& p : periods)
+			; // temp only
+
+		return result;
+	}
+
+
+
 	inline auto make_compounded_rate(
 		const resets& r,
 		std::chrono::year_month_day from,
