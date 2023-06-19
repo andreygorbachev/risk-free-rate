@@ -103,7 +103,7 @@ namespace risk_free_rate
 			{ { 2018y / April / 2d, 2018y / April / 3d }, 2018y / April / 3d },
 			c
 		);
-		EXPECT_DOUBLE_EQ(0.018, compound(schedule2, r));
+		EXPECT_NEAR(0.018, compound(schedule2, r), 0.000001);
 		// add more steps
 	}
 

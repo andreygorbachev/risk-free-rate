@@ -23,6 +23,7 @@
 #pragma once
 
 #include "time_series.h"
+#include "round.h"
 #include "resets.h"
 
 #include <compounding_schedule.h>
@@ -82,7 +83,8 @@ namespace risk_free_rate
 	inline auto make_compounded_rate(
 		const resets& r,
 		std::chrono::year_month_day from,
-		const calendar::calendar& publication
+		const calendar::calendar& publication,
+		const unsigned decimal_places
 	) -> resets
 	{
 		const auto& last_reset_ymd = r.get_time_series().get_period().get_until();

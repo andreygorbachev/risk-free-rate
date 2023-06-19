@@ -99,10 +99,12 @@ namespace risk_free_rate
 			calendar::SaturdaySundayWeekend,
 			std::move(hs)
 		};
+		const auto decimal_places = 5u;
 		const auto cr = make_compounded_rate(
 			r,
 			from,
-			publication
+			publication,
+			decimal_places
 		);
 
 		const auto expected = parse_csv(
