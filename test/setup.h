@@ -81,6 +81,7 @@ namespace risk_free_rate
 	// from https://www.ecb.europa.eu/stats/financial_markets_and_interest_rates/euro_short-term_rate/html/index.en.html
 	constexpr auto EuroSTR = "EuroSTR.csv";
 	constexpr auto EuroSTRCompoundedIndex = "EuroSTR_compounded_index.csv";
+	constexpr auto EuroSTRCompoundedRate = EuroSTRCompoundedIndex;
 
 
 	// from https://www.six-group.com/en/products-services/the-swiss-stock-exchange/market-data/indices/swiss-reference-rates.html
@@ -119,7 +120,8 @@ namespace risk_free_rate
 		const auto csv = rapidcsv::Document(
 			fileName, 
 			rapidcsv::LabelParams(0u, -1), // we expect titles
-			rapidcsv::SeparatorParams(separator)
+			rapidcsv::SeparatorParams(separator),
+			rapidcsv::ConverterParams(true) // needed for EuroSTR compounded rates
 		);
 		// at the moment we adjust the input files manually
 		// to make sure we have a simple and complete single row of titles
