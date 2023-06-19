@@ -151,6 +151,27 @@ namespace risk_free_rate
 	constexpr auto EnglandAndWalesICS = "england-and-wales.ics";
 
 
+	inline auto make_TARGET2_holiday_schedule() -> calendar::schedule
+	{
+		// from https://www.ecb.europa.eu/press/pr/date/2000/html/pr001214_4.en.html
+
+		const auto LaborDay = calendar::named_holiday{ std::chrono::May / std::chrono::day{ 1u } }; // should it be in calendar?
+
+		auto rules = std::unordered_set<const calendar::annual_holiday*>{};
+		rules.insert(&calendar::NewYearsDay);
+		rules.insert(&calendar::GoodFriday);
+		rules.insert(&calendar::EasterMonday);
+		rules.insert(&LaborDay);
+		rules.insert(&calendar::ChristmasDay);
+		rules.insert(&calendar::BoxingDay);
+
+		return calendar::make_holiday_schedule(
+			{ std::chrono::year{ 2019 }, std::chrono::year{ 2023 } },
+			rules
+		);
+	}
+
+
 	inline auto make_SIX_holiday_schedule() -> calendar::schedule
 	{
 		// from https://www.six-group.com/en/products-services/the-swiss-stock-exchange/market-data/news-tools/trading-currency-holiday-calendar.html#/

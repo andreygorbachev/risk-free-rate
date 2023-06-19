@@ -56,9 +56,15 @@ namespace risk_free_rate
 
 	inline auto make_compounded_rate(
 		const resets& r,
-		std::chrono::year_month_day from
+		std::chrono::year_month_day from,
+		const calendar::calendar& publication
 	) -> resets
 	{
+		const auto& last_reset_ymd = r.get_time_series().get_period().get_until();
+
+		const auto effective = make_effective<std::chrono::months>(last_reset_ymd, publication, 3);
+		// at the moment a single rate, only for 3m
+
 		return r; // temp only
 	}
 

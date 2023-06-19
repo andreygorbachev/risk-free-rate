@@ -28,11 +28,13 @@
 #include <day_counts.h>
 
 #include <period.h>
+#include <weekend.h>
 
 #include <gtest/gtest.h>
 
 #include <chrono>
 #include <memory>
+#include <calendar.h>
 
 
 using namespace coupon_schedule;
