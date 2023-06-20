@@ -86,12 +86,12 @@ namespace risk_free_rate
 		const auto publication = calendar::calendar{
 			calendar::SaturdaySundayWeekend,
 			calendar::schedule{
-				calendar::period{ 2023y / June / 1d, 2023y / July / 31d },
+				calendar::period{ 2022y / June / 1d, 2022y / July / 31d },
 				{},
 			}
 		};
 
-		EXPECT_EQ(2023y / June / 30d, make_effective<std::chrono::months>(2023y / July / 31d, 1, publication));
+		EXPECT_EQ(2022y / June / 30d, make_effective<std::chrono::months>(2022y / July / 31d, 1, publication));
 	}
 
 
