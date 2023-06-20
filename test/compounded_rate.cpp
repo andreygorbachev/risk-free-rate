@@ -81,6 +81,20 @@ namespace risk_free_rate
 	}
 
 
+	TEST(compounded_rate, make_effective_eom)
+	{
+		const auto publication = calendar::calendar{
+			calendar::SaturdaySundayWeekend,
+			calendar::schedule{
+				calendar::period{ 2023y / June / 1d, 2023y / July / 31d },
+				{},
+			}
+		};
+
+		EXPECT_EQ(2023y / June / 30d, make_effective<std::chrono::months>(2023y / July / 31d, 1, publication));
+	}
+
+
 	TEST(compounded_rate, compound)
 	{
 		const auto resets_period = calendar::period{ 2018y / April / 2d, 2018y / April / 6d };
