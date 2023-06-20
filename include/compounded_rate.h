@@ -111,7 +111,10 @@ namespace risk_free_rate
 
 				const auto rate = compound(schedule, r);
 
-				result[maturity] = round(to_percent(rate), decimal_places); // from_percent/to_percent - too fragile? (should it be in the parser only?)
+				result[maturity] = round(to_percent(rate), decimal_places);
+				// from_percent/to_percent - too fragile? (should it be in the parser only?)
+				// maybe resets is in %, but some view on that is what we need for calcs?
+				// (also optinal in resets and NaN in the view?)
 			}
 		}
 

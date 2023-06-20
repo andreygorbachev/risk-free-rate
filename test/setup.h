@@ -39,6 +39,7 @@
 #include <memory>
 #include <optional>
 #include <unordered_set>
+#include <cmath>
 
 
 namespace rapidcsv
@@ -64,6 +65,15 @@ namespace rapidcsv
 
 			ss >> std::chrono::parse("%2d.%2m.%Y", val); // SARON
 		}
+	}
+
+	template<>
+	inline void Converter<std::optional<double>>::ToVal(const std::string& str, std::optional<double>& val) const
+	{
+		if(!str.empty())
+			val = std::stod(str); // should probably check pos as well
+		else
+			val = std::nullopt;
 	}
 
 }
@@ -138,9 +148,10 @@ namespace risk_free_rate
 		{
 			// we expect each row to contain date,observation
 			const auto date = csv.GetCell<std::chrono::year_month_day>(dateColumnName, i);
-			const auto observation = csv.GetCell<double>(observationColumnName, i);
+			const auto observation = csv.GetCell<std::optional<double>>(observationColumnName, i);
 
-			ts[date] = observation;
+			if(observation)
+				ts[date] = observation; // or should [] work with optional<double>, rather than double? (some functionality for both?)
 		}
 
 		return ts;
