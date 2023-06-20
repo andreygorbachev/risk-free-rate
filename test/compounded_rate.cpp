@@ -91,7 +91,7 @@ namespace risk_free_rate
 			}
 		};
 
-		EXPECT_EQ(2020y / February / 29d, make_effective<std::chrono::months>(2020y / March / 31d, 1, publication));
+		EXPECT_EQ(2020y / February / 28d, make_effective<std::chrono::months>(2020y / March / 31d, 1, publication));
 	}
 
 	TEST(compounded_rate, make_effective_eom1)

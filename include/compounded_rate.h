@@ -47,10 +47,7 @@ namespace risk_free_rate
 		const calendar::calendar& publication
 	) -> std::chrono::year_month_day
 	{
-		auto result = calendar::ModifiedPreceding.adjust(
-			maturity - T{ term },
-			publication
-		); // please note that 1w version needs Preceding
+		auto result = maturity - T{ term };
 
 		// should it be factored out as a function?
 		// could we have !ok for some other reason than expected below?
@@ -58,7 +55,10 @@ namespace risk_free_rate
 			result = std::chrono::year_month_day_last{
 				result.year(),
 				result.month() / std::chrono::last
-			};
+		};
+
+		result = calendar::ModifiedPreceding.adjust(result,	publication);
+		// please note that 1w version needs Preceding
 
 		return result;
 	}
@@ -93,7 +93,7 @@ namespace risk_free_rate
 
 
 
-	inline auto make_compounded_rate(
+	inline auto make_compounded_rate( // should it be make_compounded_rate_resets?
 		const int term,
 		const resets& r,
 		std::chrono::year_month_day from,

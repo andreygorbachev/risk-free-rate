@@ -39,7 +39,7 @@
 namespace risk_free_rate
 {
 
-	inline auto make_compounded_index(
+	inline auto make_compounded_index( // should it be make_compounded_index_resets?
 		const resets& r,
 		std::chrono::year_month_day from,
 		const calendar::calendar& publication,
