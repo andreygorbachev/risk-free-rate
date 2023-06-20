@@ -83,6 +83,41 @@ namespace risk_free_rate
 	}
 
 
+	TEST(eurostr, make_compounded_rate_1m)
+	{
+		auto ts = parse_csv(
+			EuroSTR,
+			"Period"s,
+			"Volume-weighted trimmed mean rate"s
+		);
+
+		auto hs = make_TARGET2_holiday_schedule();
+
+		const auto term = 1;
+		const auto r = resets{ move(ts), &Actual360 };
+		const auto from = 2019y / October / 1d;
+		const auto publication = calendar::calendar{
+			calendar::SaturdaySundayWeekend,
+			std::move(hs)
+		};
+		const auto decimal_places = 5u;
+		const auto cr = make_compounded_rate(
+			term,
+			r,
+			from,
+			publication,
+			decimal_places
+		);
+
+		const auto expected = parse_csv(
+			EuroSTRCompoundedRate,
+			"Period"s,
+			"Euro Short-Term Rate - 1-month Compounded Average Rate, Compounded average rate"s
+		);
+		EXPECT_EQ(expected, cr.get_time_series());
+	}
+
+
 	TEST(eurostr, make_compounded_rate_3m)
 	{
 		auto ts = parse_csv(
@@ -93,6 +128,7 @@ namespace risk_free_rate
 
 		auto hs = make_TARGET2_holiday_schedule();
 
+		const auto term = 3;
 		const auto r = resets{ move(ts), &Actual360 };
 		const auto from = 2019y / October / 1d;
 		const auto publication = calendar::calendar{
@@ -101,6 +137,7 @@ namespace risk_free_rate
 		};
 		const auto decimal_places = 5u;
 		const auto cr = make_compounded_rate(
+			term,
 			r,
 			from,
 			publication,

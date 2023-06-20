@@ -43,12 +43,12 @@ namespace risk_free_rate
 	template<typename T>
 	auto make_effective(
 		const std::chrono::year_month_day& maturity,
-		const calendar::calendar& publication,
-		const int offset // good name?
+		const int term,
+		const calendar::calendar& publication
 	) -> std::chrono::year_month_day
 	{
 		return calendar::ModifiedPreceding.adjust(
-			maturity - T{ offset },
+			maturity - T{ term },
 			publication
 		); // please note that 1w version needs Preceding
 	}
@@ -84,6 +84,7 @@ namespace risk_free_rate
 
 
 	inline auto make_compounded_rate(
+		const int term,
 		const resets& r,
 		std::chrono::year_month_day from,
 		const calendar::calendar& publication,
@@ -100,7 +101,7 @@ namespace risk_free_rate
 
 		for (auto d = from; d <= until; d = coupon_schedule::make_overnight_maturity(d, publication))
 		{
-			const auto effective = make_effective<std::chrono::months>(d, publication, 3); // only 3m maturity for now
+			const auto effective = make_effective<std::chrono::months>(d, term, publication);
 			const auto maturity = d;
 
 			if (effective >= from) // this also means that we can have resets "from" well in advance of actual first reset

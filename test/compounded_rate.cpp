@@ -51,7 +51,7 @@ namespace risk_free_rate
 			}
 		};
 
-		EXPECT_EQ(2020y / April / 16d, make_effective<std::chrono::weeks>(2020y / April / 23d, publication, 1));
+		EXPECT_EQ(2020y / April / 16d, make_effective<std::chrono::weeks>(2020y / April / 23d, 1, publication));
 	}
 */
 	TEST(compounded_rate, make_effective2)
@@ -64,7 +64,7 @@ namespace risk_free_rate
 			}
 		};
 
-		EXPECT_EQ(2020y / April / 24d, make_effective<std::chrono::months>(2020y / May / 25d, publication, 1));
+		EXPECT_EQ(2020y / April / 24d, make_effective<std::chrono::months>(2020y / May / 25d, 1, publication));
 	}
 
 	TEST(compounded_rate, make_effective3)
@@ -77,7 +77,7 @@ namespace risk_free_rate
 			}
 		};
 
-		EXPECT_EQ(2019y / January / 2d, make_effective<std::chrono::months>(2019y / February / 1d, publication, 1));
+		EXPECT_EQ(2019y / January / 2d, make_effective<std::chrono::months>(2019y / February / 1d, 1, publication));
 	}
 
 
