@@ -94,21 +94,26 @@ namespace risk_free_rate
 
 		auto until = coupon_schedule::make_overnight_maturity(last_reset_ymd, publication);
 
-		const auto effective = make_effective<std::chrono::months>(until, publication, 3);
-		const auto maturity = until;
-		// at the moment a single rate and only for 3m
-
-		const auto coupon_period = coupon_schedule::coupon_period{ { effective, maturity }, maturity };
-
-		const auto schedule = coupon_schedule::make_compounding_schedule(coupon_period, publication);
-
-		const auto rate = compound(schedule, r);
-
 		auto from_until = calendar::days_period{ std::move(from), std::move(until) };
 
 		auto result = resets::storage{ std::move(from_until) };
 
-		result[maturity] = round(to_percent(rate), decimal_places); // from_percent/to_percent - too fragile? (should it be in the parser only?)
+		for (auto d = from; d <= until; d = coupon_schedule::make_overnight_maturity(d, publication))
+		{
+			const auto effective = make_effective<std::chrono::months>(d, publication, 3); // only 3m maturity for now
+			const auto maturity = d;
+
+			if (effective >= from) // this also means that we can have resets "from" well in advance of actual first reset
+			{
+				const auto coupon_period = coupon_schedule::coupon_period{ { effective, maturity }, maturity };
+
+				const auto schedule = coupon_schedule::make_compounding_schedule(coupon_period, publication);
+
+				const auto rate = compound(schedule, r);
+
+				result[maturity] = round(to_percent(rate), decimal_places); // from_percent/to_percent - too fragile? (should it be in the parser only?)
+			}
+		}
 
 		const auto day_count = r.get_day_count();
 
