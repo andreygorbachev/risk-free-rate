@@ -112,9 +112,7 @@ namespace risk_free_rate
 			"Period"s,
 			"Euro Short-Term Rate - 3-months Compounded Average Rate, Compounded average rate"s
 		);
-//		EXPECT_EQ(/*expected*/r.get_time_series(), cr.get_time_series());
-
-		EXPECT_EQ(*expected[2023y / June / 2d], *cr.get_time_series()[2023y / June / 2d]);
+		EXPECT_EQ(expected, cr.get_time_series());
 	}
 
 }
