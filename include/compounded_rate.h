@@ -78,6 +78,9 @@ namespace risk_free_rate
 	// maybe to move the average through time we can also undo an oldest period and then add a 1 new
 	// (but would it be the same thing numerically?)
 
+	// compounding forward or backwards - probably slightly different results numerically
+	// (is it 100% clear from documentation that it sould be forward only?)
+
 
 
 	inline auto make_compounded_rate(
@@ -89,15 +92,27 @@ namespace risk_free_rate
 	{
 		const auto& last_reset_ymd = r.get_time_series().get_period().get_until();
 
-		const auto effective = make_effective<std::chrono::months>(last_reset_ymd, publication, 3);
-		const auto maturity = last_reset_ymd;
-		// at the moment a single rate, only for 3m
+		auto until = coupon_schedule::make_overnight_maturity(last_reset_ymd, publication);
+
+		const auto effective = make_effective<std::chrono::months>(until, publication, 3);
+		const auto maturity = until;
+		// at the moment a single rate and only for 3m
 
 		const auto coupon_period = coupon_schedule::coupon_period{ { effective, maturity }, maturity };
 
 		const auto schedule = coupon_schedule::make_compounding_schedule(coupon_period, publication);
 
-		return r; // temp only
+		const auto rate = compound(schedule, r);
+
+		auto from_until = calendar::days_period{ std::move(from), std::move(until) };
+
+		auto result = resets::storage{ std::move(from_until) };
+
+		result[maturity] = round(to_percent(rate), decimal_places); // from_percent/to_percent - too fragile? (should it be in the parser only?)
+
+		const auto day_count = r.get_day_count();
+
+		return resets{ std::move(result), day_count }; // we assume that resets day count and rate day count are the same
 	}
 
 }

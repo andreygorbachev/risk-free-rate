@@ -153,7 +153,7 @@ namespace risk_free_rate
 
 	inline auto make_TARGET2_holiday_schedule() -> calendar::schedule
 	{
-		// from https://www.ecb.europa.eu/press/pr/date/2000/html/pr001214_4.en.html
+		// from https://www.ecb.europa.eu/paym/target/target2/profuse/calendar/html/index.en.html
 
 		const auto LaborDay = calendar::named_holiday{ std::chrono::May / std::chrono::day{ 1u } }; // should it be in calendar?
 
