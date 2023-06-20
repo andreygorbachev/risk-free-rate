@@ -81,7 +81,20 @@ namespace risk_free_rate
 	}
 
 
-	TEST(compounded_rate, make_effective_eom)
+	TEST(compounded_rate, make_effective_eom2)
+	{
+		const auto publication = calendar::calendar{
+			calendar::SaturdaySundayWeekend,
+			calendar::schedule{
+				calendar::period{ 2020y / February / 1d, 2020y / March / 31d },
+				{},
+			}
+		};
+
+		EXPECT_EQ(2020y / February / 29d, make_effective<std::chrono::months>(2020y / March / 31d, 1, publication));
+	}
+
+	TEST(compounded_rate, make_effective_eom1)
 	{
 		const auto publication = calendar::calendar{
 			calendar::SaturdaySundayWeekend,
