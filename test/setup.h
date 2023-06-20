@@ -177,7 +177,7 @@ namespace risk_free_rate
 		rules.insert(&calendar::BoxingDay);
 
 		return calendar::make_holiday_schedule(
-			{ std::chrono::year{ 2019 }, std::chrono::year{ 2023 } },
+			{ std::chrono::year{ 2002 }, std::chrono::year{ 2023 } },
 			rules
 		);
 	}
