@@ -38,7 +38,6 @@
 #include <sstream>
 #include <memory>
 #include <optional>
-#include <unordered_set>
 #include <cmath>
 
 
@@ -168,7 +167,7 @@ namespace risk_free_rate
 
 		const auto LaborDay = calendar::named_holiday{ std::chrono::May / std::chrono::day{ 1u } }; // should it be in calendar?
 
-		auto rules = std::unordered_set<const calendar::annual_holiday*>{};
+		auto rules = calendar::annual_holiday_storage{};
 		rules.insert(&calendar::NewYearsDay);
 		rules.insert(&calendar::GoodFriday);
 		rules.insert(&calendar::EasterMonday);
@@ -191,7 +190,7 @@ namespace risk_free_rate
 		const auto LaborDay = calendar::named_holiday{ std::chrono::May / std::chrono::day{ 1u } }; // should it be in calendar?
 		const auto NationalDay = calendar::named_holiday{ std::chrono::August / std::chrono::day{ 1u } };
 
-		auto rules = std::unordered_set<const calendar::annual_holiday*>{};
+		auto rules = calendar::annual_holiday_storage{};
 		rules.insert(&calendar::NewYearsDay);
 		rules.insert(&BerchtoldDay);
 		rules.insert(&calendar::GoodFriday);

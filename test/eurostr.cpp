@@ -36,7 +36,6 @@
 
 #include <chrono>
 #include <memory>
-#include <unordered_set>
 
 
 using namespace coupon_schedule;
