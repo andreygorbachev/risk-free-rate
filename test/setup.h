@@ -97,6 +97,7 @@ namespace risk_free_rate
 	// from https://www.six-group.com/en/products-services/the-swiss-stock-exchange/market-data/indices/swiss-reference-rates.html
 	constexpr auto SARON = "SARON.csv";
 	constexpr auto SARONCompoundedIndex = SARON;
+	constexpr auto SARONCompoundedRate1W = "h_sar1wc_delayed.csv";
 
 
 	inline auto _make_from_until(

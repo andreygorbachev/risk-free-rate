@@ -24,6 +24,7 @@
 
 #include <resets.h>
 #include <compounded_index.h>
+#include <compounded_rate.h>
 
 #include <day_counts.h>
 
@@ -138,6 +139,56 @@ namespace risk_free_rate
 		)
 		{
 			const auto& o = ci.get_time_series()[d];
+
+			const auto& e = expected[d];
+			if (e)
+				EXPECT_EQ(*e, *o);
+			else
+				EXPECT_FALSE(o);
+		}
+	}
+
+
+	TEST(saron, make_compounded_rate2_1w)
+	{
+		auto ts = parse_csv(
+			SARON,
+			"Date"s,
+			"Swiss Average Rate ON"s,
+			';'
+		);
+
+		auto hs = make_SIX_holiday_schedule();
+
+		const auto term = 1;
+		const auto r = resets{ move(ts), &Actual360 };
+		const auto from = 2000y / June / 23d;
+		const auto publication = calendar::calendar{
+			calendar::SaturdaySundayWeekend,
+			std::move(hs)
+		};
+		const auto decimal_places = 4u;
+		const auto cr = make_compounded_rate2(
+			term,
+			r,
+			from,
+			publication,
+			decimal_places
+		);
+
+		const auto expected = parse_csv(
+			SARONCompoundedRate1W,
+			"end_date"s,
+			"value"s,
+			';'
+		);
+//		EXPECT_EQ(expected, cr.get_time_series());
+		for (auto d = expected.get_period().get_from();
+			d <= expected.get_period().get_until();
+			d = sys_days{ d } + days{ 1 }
+		)
+		{
+			const auto& o = cr.get_time_series()[d];
 
 			const auto& e = expected[d];
 			if (e)
