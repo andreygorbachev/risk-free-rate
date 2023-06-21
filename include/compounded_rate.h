@@ -65,6 +65,34 @@ namespace risk_free_rate
 	// or should we do from/until instead of effective/maturity?
 	// are both there functions just an example of a relative date? (which might be better captured as a class)
 
+	template<>
+	inline auto make_effective<std::chrono::weeks>(
+		const std::chrono::year_month_day& maturity,
+		const int term,
+		const calendar::calendar& publication
+	) -> std::chrono::year_month_day
+	{
+		auto result = std::chrono::year_month_day{
+			std::chrono::sys_days{ maturity } - std::chrono::days{ term }
+		};
+
+		// should it be factored out as a function?
+		// could we have !ok for some other reason than expected below?
+		if (!result.ok()) // we have a non-existing day of month (29, 30 or 31)
+			result = std::chrono::year_month_day_last{
+				result.year(),
+				result.month() / std::chrono::last
+		};
+
+		result = calendar::ModifiedPreceding.adjust(result, publication);
+		// please note that 1w version needs Preceding
+
+		return result;
+	}
+	// or should we do from/until instead of effective/maturity?
+	// are both there functions just an example of a relative date? (which might be better captured as a class)
+
+
 
 
 	// should it be implemented via recursion as well? (so we can add one more priod if needed)
@@ -134,4 +162,49 @@ namespace risk_free_rate
 		return resets{ std::move(result), day_count }; // we assume that resets day count and rate day count are the same
 	}
 
+
+	// needs a better name
+	inline auto make_compounded_rate2( // should it be make_compounded_rate_resets?
+		const int term,
+		const resets& r,
+		std::chrono::year_month_day from,
+		const calendar::calendar& publication,
+		const unsigned decimal_places
+	) -> resets
+	{
+		const auto& last_reset_ymd = r.get_time_series().get_period().get_until();
+
+		auto until = coupon_schedule::make_overnight_maturity(last_reset_ymd, publication);
+
+		auto from_until = calendar::days_period{ std::move(from), std::move(until) };
+
+		auto result = resets::storage{ std::move(from_until) };
+
+		for (auto d = from; d <= until; d = coupon_schedule::make_overnight_maturity(d, publication))
+		{
+			const auto effective = make_effective<std::chrono::weeks>(d, term, publication);
+			const auto maturity = d;
+
+			if (effective >= from) // this also means that we can have resets "from" well in advance of actual first reset
+			{
+				const auto coupon_period = coupon_schedule::coupon_period{ { effective, maturity }, maturity };
+
+				const auto schedule = coupon_schedule::make_compounding_schedule(coupon_period, publication);
+
+				const auto rate = compound(schedule, r);
+
+				result[maturity] = round(to_percent(rate), decimal_places);
+				// from_percent/to_percent - too fragile? (should it be in the parser only?)
+				// maybe resets is in %, but some view on that is what we need for calcs?
+				// (also optinal in resets and NaN in the view?)
+			}
+		}
+
+		const auto day_count = r.get_day_count();
+
+		return resets{ std::move(result), day_count }; // we assume that resets day count and rate day count are the same
+	}
+
 }
+
+
