@@ -20,6 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+#include "setup.h"
+
 #include <compounded_rate.h>
 
 #include <day_counts.h>
@@ -108,6 +110,73 @@ namespace risk_free_rate
 	}
 
 	// check if EOM definition in the SIX document makes sense
+
+	TEST(compounded_rate, make_effective_x1)
+	{
+		// The end date falls on the last business day of the month. The
+		// start date is moved to the last business day of a month.
+
+		const auto publication = calendar::calendar{
+			calendar::SaturdaySundayWeekend,
+			make_SIX_holiday_schedule()
+		};
+
+		EXPECT_EQ(2018y / March / 29d, make_effective(2018y / April / 30d, months(1), &calendar::ModifiedPreceding, publication));
+	}
+
+	TEST(compounded_rate, make_effective_x2)
+	{
+		// Unique allocation according to the money market calendar.
+
+		const auto publication = calendar::calendar{
+			calendar::SaturdaySundayWeekend,
+			make_SIX_holiday_schedule()
+		};
+
+		EXPECT_EQ(2018y / May / 15d, make_effective(2018y / June / 15d, months(1), &calendar::ModifiedPreceding, publication));
+	}
+
+	TEST(compounded_rate, make_effective_x3)
+	{
+		// Two possible start dates according to the money market
+		// calendar.leading to the end date 08.10.2018.The earlier date
+		// 06.09.2018 will be selected.
+
+		const auto publication = calendar::calendar{
+			calendar::SaturdaySundayWeekend,
+			make_SIX_holiday_schedule()
+		};
+
+		EXPECT_EQ(2018y / September / 6d, make_effective(2018y / October / 8d, months(1), &calendar::ModifiedPreceding, publication));
+	}
+
+	TEST(compounded_rate, make_effective_x4)
+	{
+		// Three possible start dates according to the money market
+		// calendar, leading to the end date 23.04.2018.The middle date
+		// 22.03.2018 will be selected.
+
+		const auto publication = calendar::calendar{
+			calendar::SaturdaySundayWeekend,
+			make_SIX_holiday_schedule()
+		};
+
+		EXPECT_EQ(2018y / March / 22d, make_effective(2018y / April / 23d, months(1), &calendar::ModifiedPreceding, publication));
+	}
+
+	TEST(compounded_rate, make_effective_x5)
+	{
+		// The previous business day is used since 10.11.2019 is not a
+		// non - business day.
+
+		const auto publication = calendar::calendar{
+			calendar::SaturdaySundayWeekend,
+			make_SIX_holiday_schedule()
+		};
+
+		EXPECT_EQ(2019y / November / 8d, make_effective(2019y / December / 10d, months(1), &calendar::ModifiedPreceding, publication));
+	}
+
 
 	// add tests for make_maturity
 
