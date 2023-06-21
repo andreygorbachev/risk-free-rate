@@ -84,6 +84,7 @@ namespace risk_free_rate
 	// from https://www.bankofengland.co.uk/markets/sonia-benchmark
 	constexpr auto SONIA = "SONIA.csv";
 	constexpr auto SONIACompoundedIndex = "SONIA_compounded_index.csv";
+	// as far as I know there are no compounded rates published for SONIA
 	// daily rounding to 18 decimal places would need more thinking
 
 
