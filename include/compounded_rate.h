@@ -44,6 +44,7 @@ namespace risk_free_rate
 	auto make_maturity(
 		const std::chrono::year_month_day& maturity,
 		const int term,
+		const calendar::business_day_convention* const convention,
 		const calendar::calendar& publication
 	) -> std::chrono::year_month_day
 	{
@@ -57,7 +58,7 @@ namespace risk_free_rate
 				result.month() / std::chrono::last
 		};
 
-		result = calendar::ModifiedFollowing.adjust(result, publication); // maybe pass the business day convention in
+		result = convention->adjust(result, publication);
 
 		return result;
 	}
@@ -66,6 +67,7 @@ namespace risk_free_rate
 	inline auto make_maturity<std::chrono::weeks>(
 		const std::chrono::year_month_day& maturity,
 		const int term,
+		const calendar::business_day_convention* const convention,
 		const calendar::calendar& publication
 	) -> std::chrono::year_month_day
 	{
@@ -73,7 +75,7 @@ namespace risk_free_rate
 			std::chrono::sys_days{ maturity } + std::chrono::weeks{ term }
 		};
 
-		result = calendar::Following.adjust(result, publication); // maybe pass the business day convention in
+		result = convention->adjust(result, publication);
 
 		return result;
 	}
@@ -82,6 +84,7 @@ namespace risk_free_rate
 	auto make_effective(
 		const std::chrono::year_month_day& maturity,
 		const int term,
+		const calendar::business_day_convention* const convention,
 		const calendar::calendar& publication
 	) -> std::chrono::year_month_day
 	{
@@ -95,7 +98,7 @@ namespace risk_free_rate
 				result.month() / std::chrono::last
 		};
 
-		result = calendar::ModifiedPreceding.adjust(result,	publication); // maybe pass the business day convention in
+		result = convention->adjust(result, publication);
 
 		return result;
 	}
@@ -104,6 +107,7 @@ namespace risk_free_rate
 	inline auto make_effective<std::chrono::weeks>(
 		const std::chrono::year_month_day& maturity,
 		const int term,
+		const calendar::business_day_convention* const convention,
 		const calendar::calendar& publication
 	) -> std::chrono::year_month_day
 	{
@@ -111,7 +115,7 @@ namespace risk_free_rate
 			std::chrono::sys_days{ maturity } - std::chrono::weeks{ term }
 		};
 
-		result = calendar::Preceding.adjust(result, publication); // maybe pass the business day convention in
+		result = convention->adjust(result, publication);
 
 		return result;
 	}
@@ -164,7 +168,12 @@ namespace risk_free_rate
 
 		for (auto d = from; d <= until; d = coupon_schedule::make_overnight_maturity(d, publication))
 		{
-			const auto effective = make_effective<std::chrono::months>(d, term, publication);
+			const auto effective = make_effective<std::chrono::months>(
+				d,
+				term,
+				&calendar::ModifiedPreceding,
+				publication
+			);
 			const auto maturity = d;
 
 			if (effective >= from) // this also means that we can have resets "from" well in advance of actual first reset
@@ -207,7 +216,12 @@ namespace risk_free_rate
 
 		for (auto d = from; d <= until; d = coupon_schedule::make_overnight_maturity(d, publication))
 		{
-			const auto effective = make_effective<std::chrono::weeks>(d, term, publication);
+			const auto effective = make_effective<std::chrono::weeks>(
+				d,
+				term,
+				&calendar::Preceding,
+				publication
+			);
 			const auto maturity = d;
 
 			if (effective >= from) // this also means that we can have resets "from" well in advance of actual first reset
