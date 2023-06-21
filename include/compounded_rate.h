@@ -40,6 +40,21 @@
 namespace risk_free_rate
 {
 
+	// is this the right place for this function?
+	inline auto _make_ok(const std::chrono::year_month_day& ymd) noexcept -> std::chrono::year_month_day
+	{
+		// could we have !ok for some other reason than expected below?
+		if (ymd.ok())
+			return ymd;
+		else
+			// we have a non-existing day of month (29, 30 or 31)
+			return std::chrono::year_month_day_last{
+				ymd.year(),
+				ymd.month() / std::chrono::last
+			};
+	}
+
+
 	template<typename T>
 	auto make_maturity(
 		const std::chrono::year_month_day& maturity,
@@ -50,13 +65,7 @@ namespace risk_free_rate
 	{
 		auto result = maturity + T{ term };
 
-		// should it be factored out as a function?
-		// could we have !ok for some other reason than expected below?
-		if (!result.ok()) // we have a non-existing day of month (29, 30 or 31)
-			result = std::chrono::year_month_day_last{
-				result.year(),
-				result.month() / std::chrono::last
-		};
+		result = _make_ok(result);
 
 		result = convention->adjust(result, publication);
 
@@ -90,13 +99,7 @@ namespace risk_free_rate
 	{
 		auto result = maturity - T{ term };
 
-		// should it be factored out as a function?
-		// could we have !ok for some other reason than expected below?
-		if (!result.ok()) // we have a non-existing day of month (29, 30 or 31)
-			result = std::chrono::year_month_day_last{
-				result.year(),
-				result.month() / std::chrono::last
-		};
+		result = _make_ok(result);
 
 		result = convention->adjust(result, publication);
 
