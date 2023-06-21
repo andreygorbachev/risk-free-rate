@@ -65,6 +65,16 @@ namespace risk_free_rate
 		EXPECT_THROW(rs[2023y / January / 1d], out_of_range);
 	}
 
+	TEST(resets, last_reset_year_month_day)
+	{
+		auto ts = time_series<optional<double>>{ { 2023y / January / 1d, 2023y / June / 5d } };
+		ts[2023y / January / 3d] = 3.4269;
+
+		const auto rs = resets{ move(ts), &Actual365Fixed };
+
+		EXPECT_EQ(2023y / January / 3d, rs.last_reset_year_month_day());
+	}
+
 
 	TEST(resets, from_percent)
 	{
