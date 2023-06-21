@@ -116,7 +116,7 @@ namespace risk_free_rate
 		const unsigned decimal_places
 	) -> resets
 	{
-		const auto& last_reset_ymd = r.get_time_series().get_period().get_until();
+		const auto& last_reset_ymd = r.last_reset_year_month_day();
 
 		auto until = coupon_schedule::make_overnight_maturity(last_reset_ymd, publication);
 
@@ -159,7 +159,7 @@ namespace risk_free_rate
 		const unsigned decimal_places
 	) -> resets
 	{
-		const auto& last_reset_ymd = r.get_time_series().get_period().get_until();
+		const auto& last_reset_ymd = r.last_reset_year_month_day();
 
 		auto until = coupon_schedule::make_overnight_maturity(last_reset_ymd, publication);
 

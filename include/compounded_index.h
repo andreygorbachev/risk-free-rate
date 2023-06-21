@@ -53,7 +53,7 @@ namespace risk_free_rate
 		// (they are just ignored in these calculations)
 		// is this an issue for the last reset?
 
-		const auto& last_reset_ymd = r.get_time_series().get_period().get_until();
+		const auto& last_reset_ymd = r.last_reset_year_month_day();
 
 		// resets are stored based on effective date of the rate (not a publication date, which is the next business day)
 		// but compounded index is published for the maturity of the last rate participating in the calculation of the index
@@ -103,7 +103,7 @@ namespace risk_free_rate
 		// (they are just ignored in these calculations)
 		// is this an issue for the last reset?
 
-		const auto& last_reset_ymd = r.get_time_series().get_period().get_until();
+		const auto& last_reset_ymd = r.last_reset_year_month_day();
 
 		// is this correct for "Swiss Current Rate ON" as well?
 		// resets are stored based on effective date of the rate (not a publication date, which is the next business day)

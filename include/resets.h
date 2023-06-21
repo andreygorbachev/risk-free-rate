@@ -77,6 +77,10 @@ namespace risk_free_rate
 		auto get_time_series() const noexcept -> const storage&;
 		auto get_day_count() const noexcept -> const coupon_schedule::day_count*;
 
+	public:
+
+		auto last_reset_year_month_day() const noexcept -> std::chrono::year_month_day;
+
 	private:
 
 		storage _ts;
@@ -113,6 +117,16 @@ namespace risk_free_rate
 	inline auto resets::get_day_count() const noexcept -> const coupon_schedule::day_count*
 	{
 		return _dc;
+	}
+
+
+	inline auto resets::last_reset_year_month_day() const noexcept -> std::chrono::year_month_day
+	{
+		auto result = _ts.get_period().get_until();
+		while (!_ts[result])
+			result = std::chrono::sys_days{ result } - std::chrono::days{ 1 };
+
+		return result;
 	}
 
 }
