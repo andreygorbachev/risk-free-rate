@@ -107,6 +107,10 @@ namespace risk_free_rate
 		EXPECT_EQ(2022y / June / 30d, make_effective<std::chrono::months>(2022y / July / 31d, 1, publication));
 	}
 
+	// check if EOM definition in the SIX document makes sense
+
+	// add tests for make_maturity
+
 
 	TEST(compounded_rate, compound)
 	{
