@@ -157,6 +157,7 @@ namespace risk_free_rate
 		const std::chrono::months& term,
 		const resets& r,
 		std::chrono::year_month_day from,
+		const calendar::business_day_convention* const convention,
 		const calendar::calendar& publication,
 		const unsigned decimal_places
 	) -> resets
@@ -174,7 +175,7 @@ namespace risk_free_rate
 			const auto effective = make_effective(
 				d,
 				term,
-				&calendar::ModifiedPreceding,
+				convention,
 				publication
 			);
 			const auto maturity = d;
@@ -205,6 +206,7 @@ namespace risk_free_rate
 		const std::chrono::weeks& term,
 		const resets& r,
 		std::chrono::year_month_day from,
+		const calendar::business_day_convention* const convention,
 		const calendar::calendar& publication,
 		const unsigned decimal_places
 	) -> resets
@@ -222,7 +224,7 @@ namespace risk_free_rate
 			const auto effective = make_effective(
 				d,
 				term,
-				&calendar::Preceding,
+				convention,
 				publication
 			);
 			const auto maturity = d;

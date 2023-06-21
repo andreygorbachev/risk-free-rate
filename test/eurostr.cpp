@@ -95,6 +95,7 @@ namespace risk_free_rate
 		const auto term = weeks{ 1 };
 		const auto r = resets{ move(ts), &Actual360 };
 		const auto from = 2019y / October / 1d;
+		const auto convention = &calendar::Preceding;
 		const auto publication = calendar::calendar{
 			calendar::SaturdaySundayWeekend,
 			move(hs)
@@ -104,6 +105,7 @@ namespace risk_free_rate
 			term,
 			r,
 			from,
+			convention,
 			publication,
 			decimal_places
 		);
@@ -143,6 +145,7 @@ namespace risk_free_rate
 		const auto term = months{ 1 };
 		const auto r = resets{ move(ts), &Actual360 };
 		const auto from = 2019y / October / 1d;
+		const auto convention = &calendar::ModifiedPreceding;
 		const auto publication = calendar::calendar{
 			calendar::SaturdaySundayWeekend,
 			move(hs)
@@ -152,6 +155,7 @@ namespace risk_free_rate
 			term,
 			r,
 			from,
+			convention,
 			publication,
 			decimal_places
 		);
@@ -191,6 +195,7 @@ namespace risk_free_rate
 		const auto term = months{ 3 };
 		const auto r = resets{ move(ts), &Actual360 };
 		const auto from = 2019y / October / 1d;
+		const auto convention = &calendar::ModifiedPreceding;
 		const auto publication = calendar::calendar{
 			calendar::SaturdaySundayWeekend,
 			move(hs)
@@ -200,6 +205,7 @@ namespace risk_free_rate
 			term,
 			r,
 			from,
+			convention,
 			publication,
 			decimal_places
 		);
@@ -239,6 +245,7 @@ namespace risk_free_rate
 		const auto term = months{ 6 };
 		const auto r = resets{ move(ts), &Actual360 };
 		const auto from = 2019y / October / 1d;
+		const auto convention = &calendar::ModifiedPreceding;
 		const auto publication = calendar::calendar{
 			calendar::SaturdaySundayWeekend,
 			move(hs)
@@ -248,6 +255,7 @@ namespace risk_free_rate
 			term,
 			r,
 			from,
+			convention,
 			publication,
 			decimal_places
 		);
@@ -287,6 +295,7 @@ namespace risk_free_rate
 		const auto term = months{ 12 };
 		const auto r = resets{ move(ts), &Actual360 };
 		const auto from = 2019y / October / 1d;
+		const auto convention = &calendar::ModifiedPreceding;
 		const auto publication = calendar::calendar{
 			calendar::SaturdaySundayWeekend,
 			move(hs)
@@ -296,6 +305,7 @@ namespace risk_free_rate
 			term,
 			r,
 			from,
+			convention,
 			publication,
 			decimal_places
 		);

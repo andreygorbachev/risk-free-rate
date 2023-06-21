@@ -163,6 +163,7 @@ namespace risk_free_rate
 		const auto term = weeks{ 1 };
 		const auto r = resets{ move(ts), &Actual360 };
 		const auto from = 2000y / June / 23d;
+		const auto convention = &calendar::Preceding;
 		const auto publication = calendar::calendar{
 			calendar::SaturdaySundayWeekend,
 			move(hs)
@@ -172,6 +173,7 @@ namespace risk_free_rate
 			term,
 			r,
 			from,
+			convention,
 			publication,
 			decimal_places
 		);
