@@ -22,10 +22,16 @@
 
 #pragma once
 
+#include "compounded_rate.h" // is this the right way around?
+
+#include <compounding_schedule.h>
+
 #include <business_day_convention_interface.h>
 #include <calendar.h>
 
 #include <chrono>
+#include <memory>
+#include <vector>
 
 
 namespace risk_free_rate
@@ -34,22 +40,72 @@ namespace risk_free_rate
 	class inverse_modified_following final : public calendar::business_day_convention
 	{
 
+	public:
+
+		explicit inverse_modified_following(
+			std::chrono::year_month_day maturity,
+			std::chrono::months term // only months to start with
+		) noexcept;
+
 	private:
 
-		virtual auto _adjust(const std::chrono::year_month_day& ymd, const calendar& cal) const noexcept -> std::chrono::year_month_day final;
+		virtual auto _adjust(const std::chrono::year_month_day& ymd, const calendar::calendar& cal) const noexcept -> std::chrono::year_month_day final;
+
+	private:
+
+		std::chrono::year_month_day _maturity;
+		std::chrono::months _term;
 
 	};
 
 
-	inline auto inverse_modified_following::_adjust(const std::chrono::year_month_day& ymd, const calendar& cal) const noexcept -> std::chrono::year_month_day
+	inverse_modified_following::inverse_modified_following(
+		std::chrono::year_month_day maturity,
+		std::chrono::months term
+	) noexcept :
+		_maturity{ std::move(maturity) },
+		_term{ std::move(term) }
 	{
-		// calculate an effective date
-
-		// move backwards in time while we still land on the same maturity
-
-		// move forwards in time from that point recording all possible MM start dates
-
-		// choose one
 	}
+
+
+	inline auto _middle(const std::vector<std::chrono::year_month_day>& es) noexcept -> std::chrono::year_month_day
+	{
+		// temp only
+		if (es.size() == 2u)
+			return es[0u];
+		else
+			return es[1u];
+	}
+
+
+	// are we relying on consistency of how ymd was calculated and _maturity/_term, etc?
+	inline auto inverse_modified_following::_adjust(const std::chrono::year_month_day& ymd, const calendar::calendar& cal) const noexcept -> std::chrono::year_month_day
+	{
+		auto e_first = std::chrono::year_month_day{};
+		auto e = ymd;
+		while (make_maturity(e, _term, &calendar::ModifiedFollowing, cal) == _maturity) // can we assert here?
+		{
+			e_first = e;
+			e = coupon_schedule::make_overnight_effective(e_first, cal);
+		}
+
+		auto e_last = std::chrono::year_month_day{};
+		auto es = std::vector<std::chrono::year_month_day>{};
+		e = e_first;
+		while (make_maturity(e, _term, &calendar::ModifiedFollowing, cal) == _maturity) // can we assert here?
+		{
+			e_last = e;
+			es.push_back(e);
+			e = coupon_schedule::make_overnight_maturity(e_last, cal);
+		}
+
+		// assert that we have at least one item?
+		if (es.size() == 1u)
+			return es.front();
+		else
+			return _middle(es);
+	}
+	// should we deal with serial dates?
 
 }

@@ -20,6 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+#include "inverse_modified_following.h"
 #include "setup.h"
 
 #include <compounded_rate.h>
@@ -121,7 +122,12 @@ namespace risk_free_rate
 			make_SIX_holiday_schedule()
 		};
 
-		EXPECT_EQ(2018y / March / 29d, make_effective(2018y / April / 30d, months(1), &calendar::ModifiedPreceding, publication));
+		const auto maturity = 2018y / April / 30d;
+		const auto term = months{ 1 };
+
+		const auto convention = inverse_modified_following{ maturity, term };
+
+		EXPECT_EQ(2018y / March / 29d, make_effective(maturity, term, &convention, publication));
 	}
 
 	TEST(compounded_rate, make_effective_x2)
@@ -133,7 +139,12 @@ namespace risk_free_rate
 			make_SIX_holiday_schedule()
 		};
 
-		EXPECT_EQ(2018y / May / 15d, make_effective(2018y / June / 15d, months(1), &calendar::ModifiedPreceding, publication));
+		const auto maturity = 2018y / June / 15d;
+		const auto term = months{ 1 };
+
+		const auto convention = inverse_modified_following{ maturity, term };
+
+		EXPECT_EQ(2018y / May / 15d, make_effective(maturity, term, &convention, publication));
 	}
 
 	TEST(compounded_rate, make_effective_x3)
@@ -147,7 +158,12 @@ namespace risk_free_rate
 			make_SIX_holiday_schedule()
 		};
 
-		EXPECT_EQ(2018y / September / 6d, make_effective(2018y / October / 8d, months(1), &calendar::ModifiedPreceding, publication));
+		const auto maturity = 2018y / October / 8d;
+		const auto term = months{ 1 };
+
+		const auto convention = inverse_modified_following{ maturity, term };
+
+		EXPECT_EQ(2018y / September / 6d, make_effective(maturity, term, &convention, publication));
 	}
 
 	TEST(compounded_rate, make_effective_x4)
@@ -161,7 +177,12 @@ namespace risk_free_rate
 			make_SIX_holiday_schedule()
 		};
 
-		EXPECT_EQ(2018y / March / 22d, make_effective(2018y / April / 23d, months(1), &calendar::ModifiedPreceding, publication));
+		const auto maturity = 2018y / April / 23d;
+		const auto term = months{ 1 };
+
+		const auto convention = inverse_modified_following{ maturity, term };
+
+		EXPECT_EQ(2018y / March / 22d, make_effective(maturity, term, &convention, publication));
 	}
 
 	TEST(compounded_rate, make_effective_x5)
@@ -174,7 +195,12 @@ namespace risk_free_rate
 			make_SIX_holiday_schedule()
 		};
 
-		EXPECT_EQ(2019y / November / 8d, make_effective(2019y / December / 10d, months(1), &calendar::ModifiedPreceding, publication));
+		const auto maturity = 2019y / December / 10d;
+		const auto term = months{ 1 };
+
+		const auto convention = inverse_modified_following{ maturity, term };
+
+		EXPECT_EQ(2019y / November / 8d, make_effective(maturity, term, &convention, publication));
 	}
 
 

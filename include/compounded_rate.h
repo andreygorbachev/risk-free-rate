@@ -57,13 +57,13 @@ namespace risk_free_rate
 
 	template<typename T>
 	auto make_maturity(
-		const std::chrono::year_month_day& maturity,
+		const std::chrono::year_month_day& effective,
 		const T& term,
 		const calendar::business_day_convention* const convention,
 		const calendar::calendar& publication
 	) -> std::chrono::year_month_day
 	{
-		auto result = maturity + term;
+		auto result = effective + term;
 
 		result = _make_ok(result);
 
@@ -74,14 +74,14 @@ namespace risk_free_rate
 
 	template<>
 	inline auto make_maturity(
-		const std::chrono::year_month_day& maturity,
+		const std::chrono::year_month_day& effective,
 		const std::chrono::weeks& term,
 		const calendar::business_day_convention* const convention,
 		const calendar::calendar& publication
 	) -> std::chrono::year_month_day
 	{
 		auto result = std::chrono::year_month_day{
-			std::chrono::sys_days{ maturity } + term
+			std::chrono::sys_days{ effective } + term
 		};
 
 		result = convention->adjust(result, publication);
