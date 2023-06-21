@@ -149,7 +149,7 @@ namespace risk_free_rate
 	}
 
 
-	TEST(saron, make_compounded_rate2_1w)
+	TEST(saron, make_compounded_rate_1w)
 	{
 		auto ts = parse_csv(
 			SARON,
@@ -169,7 +169,7 @@ namespace risk_free_rate
 			move(hs)
 		};
 		const auto decimal_places = 4u;
-		const auto cr = make_compounded_rate2(
+		const auto cr = make_compounded_rate(
 			term,
 			r,
 			from,

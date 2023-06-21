@@ -82,7 +82,7 @@ namespace risk_free_rate
 	}
 
 
-	TEST(eurostr, make_compounded_rate2_1w)
+	TEST(eurostr, make_compounded_rate_1w)
 	{
 		auto ts = parse_csv(
 			EuroSTR,
@@ -101,7 +101,7 @@ namespace risk_free_rate
 			move(hs)
 		};
 		const auto decimal_places = 5u;
-		const auto cr = make_compounded_rate2(
+		const auto cr = make_compounded_rate(
 			term,
 			r,
 			from,

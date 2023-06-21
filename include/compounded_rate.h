@@ -153,57 +153,9 @@ namespace risk_free_rate
 
 
 
-	inline auto make_compounded_rate( // should it be make_compounded_rate_resets?
-		const std::chrono::months& term,
-		const resets& r,
-		std::chrono::year_month_day from,
-		const calendar::business_day_convention* const convention,
-		const calendar::calendar& publication,
-		const unsigned decimal_places
-	) -> resets
-	{
-		const auto& last_reset_ymd = r.last_reset_year_month_day();
-
-		auto until = coupon_schedule::make_overnight_maturity(last_reset_ymd, publication);
-
-		auto from_until = calendar::days_period{ std::move(from), std::move(until) };
-
-		auto result = resets::storage{ std::move(from_until) };
-
-		for (auto d = from; d <= until; d = coupon_schedule::make_overnight_maturity(d, publication))
-		{
-			const auto effective = make_effective(
-				d,
-				term,
-				convention,
-				publication
-			);
-			const auto maturity = d;
-
-			if (effective >= from) // this also means that we can have resets "from" well in advance of actual first reset
-			{
-				const auto coupon_period = coupon_schedule::coupon_period{ { effective, maturity }, maturity };
-
-				const auto schedule = coupon_schedule::make_compounding_schedule(coupon_period, publication);
-
-				const auto rate = compound(schedule, r);
-
-				result[maturity] = round(to_percent(rate), decimal_places);
-				// from_percent/to_percent - too fragile? (should it be in the parser only?)
-				// maybe resets is in %, but some view on that is what we need for calcs?
-				// (also optinal in resets and NaN in the view?)
-			}
-		}
-
-		const auto day_count = r.get_day_count();
-
-		return resets{ std::move(result), day_count }; // we assume that resets day count and rate day count are the same
-	}
-
-
-	// needs a better name
-	inline auto make_compounded_rate2( // should it be make_compounded_rate_resets?
-		const std::chrono::weeks& term,
+	template<typename T>
+	auto make_compounded_rate( // should it be make_compounded_rate_resets?
+		const T& term,
 		const resets& r,
 		std::chrono::year_month_day from,
 		const calendar::business_day_convention* const convention,
