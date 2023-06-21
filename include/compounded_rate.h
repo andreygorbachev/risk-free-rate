@@ -57,13 +57,10 @@ namespace risk_free_rate
 				result.month() / std::chrono::last
 		};
 
-		result = calendar::ModifiedPreceding.adjust(result,	publication);
-		// please note that 1w version needs Preceding
+		result = calendar::ModifiedPreceding.adjust(result,	publication); // maybe pass the business day convention in
 
 		return result;
 	}
-	// or should we do from/until instead of effective/maturity?
-	// are both there functions just an example of a relative date? (which might be better captured as a class)
 
 	template<>
 	inline auto make_effective<std::chrono::weeks>(
@@ -84,14 +81,12 @@ namespace risk_free_rate
 				result.month() / std::chrono::last
 		};
 
-		result = calendar::ModifiedPreceding.adjust(result, publication);
-		// please note that 1w version needs Preceding
+		result = calendar::Preceding.adjust(result, publication); // maybe pass the business day convention in
 
 		return result;
 	}
 	// or should we do from/until instead of effective/maturity?
-	// are both there functions just an example of a relative date? (which might be better captured as a class)
-
+	// are both there functions and the overnight maturity function just an example of a relative date? (which might be better captured as a class)
 
 
 
