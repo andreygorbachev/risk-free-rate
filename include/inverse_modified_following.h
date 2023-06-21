@@ -59,7 +59,7 @@ namespace risk_free_rate
 	};
 
 
-	inverse_modified_following::inverse_modified_following(
+	inline inverse_modified_following::inverse_modified_following(
 		std::chrono::year_month_day maturity,
 		std::chrono::months term
 	) noexcept :
