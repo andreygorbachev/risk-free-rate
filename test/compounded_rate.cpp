@@ -40,7 +40,7 @@ using namespace std::chrono;
 
 namespace risk_free_rate
 {
-/*
+
 	TEST(compounded_rate, make_effective1)
 	{
 		const auto publication = calendar::calendar{
@@ -53,7 +53,7 @@ namespace risk_free_rate
 
 		EXPECT_EQ(2020y / April / 16d, make_effective<std::chrono::weeks>(2020y / April / 23d, 1, publication));
 	}
-*/
+
 	TEST(compounded_rate, make_effective2)
 	{
 		const auto publication = calendar::calendar{
