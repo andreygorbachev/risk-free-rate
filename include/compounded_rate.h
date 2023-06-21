@@ -58,12 +58,12 @@ namespace risk_free_rate
 	template<typename T>
 	auto make_maturity(
 		const std::chrono::year_month_day& maturity,
-		const int term,
+		const T& term,
 		const calendar::business_day_convention* const convention,
 		const calendar::calendar& publication
 	) -> std::chrono::year_month_day
 	{
-		auto result = maturity + T{ term };
+		auto result = maturity + term;
 
 		result = _make_ok(result);
 
@@ -73,15 +73,15 @@ namespace risk_free_rate
 	}
 
 	template<>
-	inline auto make_maturity<std::chrono::weeks>(
+	inline auto make_maturity(
 		const std::chrono::year_month_day& maturity,
-		const int term,
+		const std::chrono::weeks& term,
 		const calendar::business_day_convention* const convention,
 		const calendar::calendar& publication
 	) -> std::chrono::year_month_day
 	{
 		auto result = std::chrono::year_month_day{
-			std::chrono::sys_days{ maturity } + std::chrono::weeks{ term }
+			std::chrono::sys_days{ maturity } + term
 		};
 
 		result = convention->adjust(result, publication);
@@ -92,12 +92,12 @@ namespace risk_free_rate
 	template<typename T>
 	auto make_effective(
 		const std::chrono::year_month_day& maturity,
-		const int term,
+		const T& term,
 		const calendar::business_day_convention* const convention,
 		const calendar::calendar& publication
 	) -> std::chrono::year_month_day
 	{
-		auto result = maturity - T{ term };
+		auto result = maturity - term;
 
 		result = _make_ok(result);
 
@@ -107,15 +107,15 @@ namespace risk_free_rate
 	}
 
 	template<>
-	inline auto make_effective<std::chrono::weeks>(
+	inline auto make_effective(
 		const std::chrono::year_month_day& maturity,
-		const int term,
+		const std::chrono::weeks& term,
 		const calendar::business_day_convention* const convention,
 		const calendar::calendar& publication
 	) -> std::chrono::year_month_day
 	{
 		auto result = std::chrono::year_month_day{
-			std::chrono::sys_days{ maturity } - std::chrono::weeks{ term }
+			std::chrono::sys_days{ maturity } - term
 		};
 
 		result = convention->adjust(result, publication);
@@ -154,7 +154,7 @@ namespace risk_free_rate
 
 
 	inline auto make_compounded_rate( // should it be make_compounded_rate_resets?
-		const int term,
+		const std::chrono::months& term,
 		const resets& r,
 		std::chrono::year_month_day from,
 		const calendar::calendar& publication,
@@ -171,7 +171,7 @@ namespace risk_free_rate
 
 		for (auto d = from; d <= until; d = coupon_schedule::make_overnight_maturity(d, publication))
 		{
-			const auto effective = make_effective<std::chrono::months>(
+			const auto effective = make_effective(
 				d,
 				term,
 				&calendar::ModifiedPreceding,
@@ -202,7 +202,7 @@ namespace risk_free_rate
 
 	// needs a better name
 	inline auto make_compounded_rate2( // should it be make_compounded_rate_resets?
-		const int term,
+		const std::chrono::weeks& term,
 		const resets& r,
 		std::chrono::year_month_day from,
 		const calendar::calendar& publication,
@@ -219,7 +219,7 @@ namespace risk_free_rate
 
 		for (auto d = from; d <= until; d = coupon_schedule::make_overnight_maturity(d, publication))
 		{
-			const auto effective = make_effective<std::chrono::weeks>(
+			const auto effective = make_effective(
 				d,
 				term,
 				&calendar::Preceding,

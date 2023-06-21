@@ -64,7 +64,7 @@ namespace risk_free_rate
 		const auto from = 1999y / June / 30d;
 		const auto publication = calendar::calendar{
 			calendar::SaturdaySundayWeekend,
-			std::move(hs)
+			move(hs)
 		};
 		const auto decimal_places = 6u;
 		const auto starting_value = 10'000.0;
@@ -114,7 +114,7 @@ namespace risk_free_rate
 		const auto from = 1999y / June / 30d;
 		const auto publication = calendar::calendar{
 			calendar::SaturdaySundayWeekend,
-			std::move(hs)
+			move(hs)
 		};
 		const auto decimal_places = 6u;
 		const auto starting_value = 10'000.0;
@@ -160,12 +160,12 @@ namespace risk_free_rate
 
 		auto hs = make_SIX_holiday_schedule();
 
-		const auto term = 1;
+		const auto term = weeks{ 1 };
 		const auto r = resets{ move(ts), &Actual360 };
 		const auto from = 2000y / June / 23d;
 		const auto publication = calendar::calendar{
 			calendar::SaturdaySundayWeekend,
-			std::move(hs)
+			move(hs)
 		};
 		const auto decimal_places = 4u;
 		const auto cr = make_compounded_rate2(

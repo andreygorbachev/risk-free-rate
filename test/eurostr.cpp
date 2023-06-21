@@ -63,7 +63,7 @@ namespace risk_free_rate
 		const auto from = 2019y / October / 1d;
 		const auto publication = calendar::calendar{
 			calendar::SaturdaySundayWeekend,
-			std::move(hs)
+			move(hs)
 		};
 		const auto decimal_places = 8u;
 		const auto ci = make_compounded_index(
@@ -92,12 +92,12 @@ namespace risk_free_rate
 
 		auto hs = make_TARGET2_holiday_schedule();
 
-		const auto term = 1;
+		const auto term = weeks{ 1 };
 		const auto r = resets{ move(ts), &Actual360 };
 		const auto from = 2019y / October / 1d;
 		const auto publication = calendar::calendar{
 			calendar::SaturdaySundayWeekend,
-			std::move(hs)
+			move(hs)
 		};
 		const auto decimal_places = 5u;
 		const auto cr = make_compounded_rate2(
@@ -140,12 +140,12 @@ namespace risk_free_rate
 
 		auto hs = make_TARGET2_holiday_schedule();
 
-		const auto term = 1;
+		const auto term = months{ 1 };
 		const auto r = resets{ move(ts), &Actual360 };
 		const auto from = 2019y / October / 1d;
 		const auto publication = calendar::calendar{
 			calendar::SaturdaySundayWeekend,
-			std::move(hs)
+			move(hs)
 		};
 		const auto decimal_places = 5u;
 		const auto cr = make_compounded_rate(
@@ -188,12 +188,12 @@ namespace risk_free_rate
 
 		auto hs = make_TARGET2_holiday_schedule();
 
-		const auto term = 3;
+		const auto term = months{ 3 };
 		const auto r = resets{ move(ts), &Actual360 };
 		const auto from = 2019y / October / 1d;
 		const auto publication = calendar::calendar{
 			calendar::SaturdaySundayWeekend,
-			std::move(hs)
+			move(hs)
 		};
 		const auto decimal_places = 5u;
 		const auto cr = make_compounded_rate(
@@ -236,12 +236,12 @@ namespace risk_free_rate
 
 		auto hs = make_TARGET2_holiday_schedule();
 
-		const auto term = 6;
+		const auto term = months{ 6 };
 		const auto r = resets{ move(ts), &Actual360 };
 		const auto from = 2019y / October / 1d;
 		const auto publication = calendar::calendar{
 			calendar::SaturdaySundayWeekend,
-			std::move(hs)
+			move(hs)
 		};
 		const auto decimal_places = 5u;
 		const auto cr = make_compounded_rate(
@@ -284,12 +284,12 @@ namespace risk_free_rate
 
 		auto hs = make_TARGET2_holiday_schedule();
 
-		const auto term = 12;
+		const auto term = months{ 12 };
 		const auto r = resets{ move(ts), &Actual360 };
 		const auto from = 2019y / October / 1d;
 		const auto publication = calendar::calendar{
 			calendar::SaturdaySundayWeekend,
-			std::move(hs)
+			move(hs)
 		};
 		const auto decimal_places = 5u;
 		const auto cr = make_compounded_rate(

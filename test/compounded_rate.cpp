@@ -51,7 +51,7 @@ namespace risk_free_rate
 			}
 		};
 
-		EXPECT_EQ(2020y / April / 16d, make_effective<std::chrono::weeks>(2020y / April / 23d, 1, &calendar::Preceding, publication));
+		EXPECT_EQ(2020y / April / 16d, make_effective(2020y / April / 23d, weeks(1), &calendar::Preceding, publication));
 	}
 
 	TEST(compounded_rate, make_effective2)
@@ -64,7 +64,7 @@ namespace risk_free_rate
 			}
 		};
 
-		EXPECT_EQ(2020y / April / 24d, make_effective<std::chrono::months>(2020y / May / 25d, 1, &calendar::ModifiedPreceding, publication));
+		EXPECT_EQ(2020y / April / 24d, make_effective(2020y / May / 25d, months(1), &calendar::ModifiedPreceding, publication));
 	}
 
 	TEST(compounded_rate, make_effective3)
@@ -77,7 +77,7 @@ namespace risk_free_rate
 			}
 		};
 
-		EXPECT_EQ(2019y / January / 2d, make_effective<std::chrono::months>(2019y / February / 1d, 1, &calendar::ModifiedPreceding, publication));
+		EXPECT_EQ(2019y / January / 2d, make_effective(2019y / February / 1d, months(1), &calendar::ModifiedPreceding, publication));
 	}
 
 
@@ -91,7 +91,7 @@ namespace risk_free_rate
 			}
 		};
 
-		EXPECT_EQ(2020y / February / 28d, make_effective<std::chrono::months>(2020y / March / 31d, 1, &calendar::ModifiedPreceding, publication));
+		EXPECT_EQ(2020y / February / 28d, make_effective(2020y / March / 31d, months(1), &calendar::ModifiedPreceding, publication));
 	}
 
 	TEST(compounded_rate, make_effective_eom1)
@@ -104,7 +104,7 @@ namespace risk_free_rate
 			}
 		};
 
-		EXPECT_EQ(2022y / June / 30d, make_effective<std::chrono::months>(2022y / July / 31d, 1, &calendar::ModifiedPreceding, publication));
+		EXPECT_EQ(2022y / June / 30d, make_effective(2022y / July / 31d, months(1), &calendar::ModifiedPreceding, publication));
 	}
 
 	// check if EOM definition in the SIX document makes sense
