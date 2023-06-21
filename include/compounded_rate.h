@@ -70,7 +70,7 @@ namespace risk_free_rate
 	) -> std::chrono::year_month_day
 	{
 		auto result = std::chrono::year_month_day{
-			std::chrono::sys_days{ maturity } - std::chrono::days{ term }
+			std::chrono::sys_days{ maturity } - std::chrono::weeks{ term }
 		};
 
 		// should it be factored out as a function?
