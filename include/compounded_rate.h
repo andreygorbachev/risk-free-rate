@@ -73,14 +73,6 @@ namespace risk_free_rate
 			std::chrono::sys_days{ maturity } - std::chrono::weeks{ term }
 		};
 
-		// should it be factored out as a function?
-		// could we have !ok for some other reason than expected below?
-		if (!result.ok()) // we have a non-existing day of month (29, 30 or 31)
-			result = std::chrono::year_month_day_last{
-				result.year(),
-				result.month() / std::chrono::last
-		};
-
 		result = calendar::Preceding.adjust(result, publication); // maybe pass the business day convention in
 
 		return result;
