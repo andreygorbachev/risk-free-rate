@@ -98,6 +98,12 @@ namespace risk_free_rate
 	constexpr auto SARON = "SARON.csv";
 	constexpr auto SARONCompoundedIndex = SARON;
 	constexpr auto SARONCompoundedRate1W = "h_sar1wc_delayed.csv";
+	constexpr auto SARONCompoundedRate1M = "h_sar1mc_delayed.csv";
+	constexpr auto SARONCompoundedRate2M = "h_sar2mc_delayed.csv";
+	constexpr auto SARONCompoundedRate3M = "h_sar3mc_delayed.csv";
+	constexpr auto SARONCompoundedRate6M = "h_sar6mc_delayed.csv";
+	constexpr auto SARONCompoundedRate9M = "h_sar9mc_delayed.csv";
+	constexpr auto SARONCompoundedRate12M = "h_sar12mc_delayed.csv";
 
 
 	inline auto _make_from_until(
