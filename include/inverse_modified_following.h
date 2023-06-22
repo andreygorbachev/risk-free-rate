@@ -104,7 +104,10 @@ namespace risk_free_rate
 		if (es.size() == 1u)
 			return es.front();
 		else
-			return _middle(es);
+			if (_maturity == cal.last_business_day({ _maturity.year(), _maturity.month() }))
+				return cal.last_business_day({ ymd.year(), ymd.month() });
+			else
+				return _middle(es);
 	}
 	// should we deal with serial dates?
 
