@@ -71,16 +71,15 @@ namespace risk_free_rate
 
 	inline auto _middle(const std::vector<std::chrono::year_month_day>& es) noexcept -> std::chrono::year_month_day
 	{
-		// temp only
-
 		// For each end date with several possible start dates according to the CHF money market calendar, the following 
 		// applies(unless the end date is the last business day of a month :
 		// – In case of an uneven number of possible start dates, the middle date will be chosen as the start date
 		// – In case of an even number of possible start dates, the earlier of the two middle dates will be chosen
-		if (es.size() == 2u)
-			return es[0u];
+		const auto m = es.size() % 2;
+		if (m != 0)
+			return es[es.size() / 2];
 		else
-			return es[1u];
+			return es[es.size() / 2 - 1];
 	}
 
 
@@ -91,35 +90,31 @@ namespace risk_free_rate
 		if (_maturity == cal.last_business_day({ _maturity.year(), _maturity.month() }))
 			return cal.last_business_day({ ymd.year(), ymd.month() });
 
-		auto e_first = std::chrono::year_month_day{};
-		auto e = ymd;
-		while (make_maturity(e, _term, &calendar::ModifiedFollowing, cal) == _maturity) // can we assert here?
-		{
-			e_first = e;
-			e = coupon_schedule::make_overnight_effective(e_first, cal);
-		}
-
-		auto e_last = std::chrono::year_month_day{};
+		// does it cover all possibilities? (also assuming non SIX calendars)
+		// could it be speed up / simplified?
 		auto es = std::vector<std::chrono::year_month_day>{};
-		e = e_first;
-		while (make_maturity(e, _term, &calendar::ModifiedFollowing, cal) == _maturity) // can we assert here?
+		for (auto d = std::chrono::sys_days{ ymd } - std::chrono::days{ 4 };
+			d <= std::chrono::sys_days{ ymd } + std::chrono::days{ 4 };
+			d += std::chrono::days{ 1 }
+		)
 		{
-			e_last = e;
-			es.push_back(e);
-			e = coupon_schedule::make_overnight_maturity(e_last, cal);
+			if(cal.is_business_day(d))
+				if(make_maturity(d, _term, &calendar::ModifiedFollowing, cal) == _maturity)
+					es.push_back(d);
 		}
 
-		// assert that we have at least one item?
-		if (es.size() == 1u)
-			// If the date is unique according to the CHF money market calendar, it will be used as the start date.
-
+		if (es.empty())
 			// If the originally calculated start date falls on a non - business day or non - existent date(e.g. 30th of February), the
 			// business day preceding the calculated start date will be the used as the start date, unless this new start date
 			// would fall in a different month.In this case, the following business day will be used as the start date and not the
 			// previous business day.
-			return calendar::ModifiedPreceding.adjust(es.front(), cal);
+			return calendar::ModifiedPreceding.adjust(ymd, cal);
 		else
-			return _middle(es);
+			if (es.size() == 1u)
+				// If the date is unique according to the CHF money market calendar, it will be used as the start date.
+				return es.front();
+			else
+				return _middle(es);
 	}
 	// should we deal with serial dates?
 
