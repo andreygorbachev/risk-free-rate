@@ -190,6 +190,8 @@ namespace risk_free_rate
 		// The previous business day is used since 10.11.2019 is not a
 		// non - business day.
 
+		// (probably typo in SIX document)
+
 		const auto publication = calendar::calendar{
 			calendar::SaturdaySundayWeekend,
 			make_SIX_holiday_schedule()

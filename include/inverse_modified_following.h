@@ -102,7 +102,7 @@ namespace risk_free_rate
 
 		// assert that we have at least one item?
 		if (es.size() == 1u)
-			return es.front();
+			return calendar::Preceding.adjust(es.front(), cal);
 		else
 			if (_maturity == cal.last_business_day({ _maturity.year(), _maturity.month() }))
 				return cal.last_business_day({ ymd.year(), ymd.month() });
