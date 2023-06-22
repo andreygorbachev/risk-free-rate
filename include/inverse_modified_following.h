@@ -72,6 +72,11 @@ namespace risk_free_rate
 	inline auto _middle(const std::vector<std::chrono::year_month_day>& es) noexcept -> std::chrono::year_month_day
 	{
 		// temp only
+
+		// For each end date with several possible start dates according to the CHF money market calendar, the following 
+		// applies(unless the end date is the last business day of a month :
+		// – In case of an uneven number of possible start dates, the middle date will be chosen as the start date
+		// – In case of an even number of possible start dates, the earlier of the two middle dates will be chosen
 		if (es.size() == 2u)
 			return es[0u];
 		else
@@ -82,6 +87,10 @@ namespace risk_free_rate
 	// are we relying on consistency of how ymd was calculated and _maturity/_term, etc?
 	inline auto inverse_modified_following::_adjust(const std::chrono::year_month_day& ymd, const calendar::calendar& cal) const noexcept -> std::chrono::year_month_day
 	{
+		// If the end date falls on the last business day of a month, the start date must also be the last business day of a month.
+		if (_maturity == cal.last_business_day({ _maturity.year(), _maturity.month() }))
+			return cal.last_business_day({ ymd.year(), ymd.month() });
+
 		auto e_first = std::chrono::year_month_day{};
 		auto e = ymd;
 		while (make_maturity(e, _term, &calendar::ModifiedFollowing, cal) == _maturity) // can we assert here?
@@ -102,12 +111,15 @@ namespace risk_free_rate
 
 		// assert that we have at least one item?
 		if (es.size() == 1u)
-			return calendar::Preceding.adjust(es.front(), cal);
+			// If the date is unique according to the CHF money market calendar, it will be used as the start date.
+
+			// If the originally calculated start date falls on a non - business day or non - existent date(e.g. 30th of February), the
+			// business day preceding the calculated start date will be the used as the start date, unless this new start date
+			// would fall in a different month.In this case, the following business day will be used as the start date and not the
+			// previous business day.
+			return calendar::ModifiedPreceding.adjust(es.front(), cal);
 		else
-			if (_maturity == cal.last_business_day({ _maturity.year(), _maturity.month() }))
-				return cal.last_business_day({ ymd.year(), ymd.month() });
-			else
-				return _middle(es);
+			return _middle(es);
 	}
 	// should we deal with serial dates?
 
