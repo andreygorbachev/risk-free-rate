@@ -117,6 +117,6 @@ namespace risk_free_rate
 			else
 				return _middle(es);
 	}
-	// should we deal with serial dates?
+	// should we use serial dates here?
 
 }
