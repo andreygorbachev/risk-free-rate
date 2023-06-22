@@ -37,6 +37,7 @@
 namespace risk_free_rate
 {
 
+	// is this something specific to SARON's compounded rates? (if yes should the name reflect that?)
 	class inverse_modified_following final : public calendar::business_day_convention
 	{
 
