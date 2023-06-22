@@ -119,4 +119,6 @@ namespace risk_free_rate
 	}
 	// should we use serial dates here?
 
+	// are EOM (and last-business day) is something orthogonal to business_day_convention and both are needed separately?
+
 }
