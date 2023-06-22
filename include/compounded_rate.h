@@ -125,6 +125,8 @@ namespace risk_free_rate
 	// or should we do from/until instead of effective/maturity?
 	// are both there functions and the overnight maturity function just an example of a relative date? (which might be better captured as a class)
 
+	// should we at least assert that the input dates are ok? (or do we need to handle them specially otherwise)
+
 
 
 	// should it be implemented via recursion as well? (so we can add one more priod if needed)
