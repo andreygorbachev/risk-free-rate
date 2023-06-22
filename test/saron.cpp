@@ -20,6 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+#include "inverse_modified_following.h"
 #include "setup.h"
 
 #include <resets.h>
@@ -148,6 +149,45 @@ namespace risk_free_rate
 		}
 	}
 
+/*
+	TEST(saron, start_date_1m)
+	{
+		auto hs = make_SIX_holiday_schedule();
+		const auto publication = calendar::calendar{
+			calendar::SaturdaySundayWeekend,
+			move(hs)
+		};
+
+		const auto term = months{ 1 };
+
+		const auto csv = rapidcsv::Document(
+			SARONCompoundedRate1M,
+			rapidcsv::LabelParams(0u, -1), // we expect titles
+			rapidcsv::SeparatorParams(';')
+		);
+
+		const auto size = csv.GetRowCount();
+		for (auto i = 0u; i < size; ++i)
+		{
+			const auto date = csv.GetCell<std::chrono::year_month_day>("date", i);
+			const auto end_date_expected = csv.GetCell<std::chrono::year_month_day>("end_date", i);
+			const auto start_date_expected = csv.GetCell<std::chrono::year_month_day>("start_date", i);
+			const auto day_count_expected = csv.GetCell<int>("day_count", i);
+
+			// should we stick with effective/maturity or consider start_date/end_date instead?
+			const auto end_date = make_overnight_maturity(date, publication);
+
+			const auto convention = inverse_modified_following{ end_date, term };
+			const auto start_date = make_effective(end_date, term, &convention, publication);
+
+			const auto day_count = sys_days{ end_date } - sys_days{ start_date };
+
+			EXPECT_EQ(end_date_expected, end_date);
+			EXPECT_EQ(start_date_expected, start_date);
+			EXPECT_EQ(day_count_expected, day_count.count());
+		}
+	}
+*/
 /*
 	TEST(saron, make_compounded_rate_1w)
 	{
