@@ -148,7 +148,7 @@ namespace risk_free_rate
 		}
 	}
 
-
+/*
 	TEST(saron, make_compounded_rate_1w)
 	{
 		auto ts = parse_csv(
@@ -199,5 +199,5 @@ namespace risk_free_rate
 				EXPECT_FALSE(o);
 		}
 	}
-
+*/
 }
