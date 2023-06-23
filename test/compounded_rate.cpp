@@ -35,8 +35,9 @@
 #include <chrono>
 
 
-//using namespace calendar;
 using namespace coupon_schedule;
+
+using namespace gregorian;
 
 using namespace std::chrono;
 
@@ -46,68 +47,68 @@ namespace risk_free_rate
 
 	TEST(compounded_rate, make_effective1)
 	{
-		const auto publication = calendar::calendar{
-			calendar::SaturdaySundayWeekend,
-			calendar::schedule{
-				calendar::period{ 2020y / April / 1d, 2020y / April / 30d },
+		const auto publication = calendar{
+			SaturdaySundayWeekend,
+			schedule{
+				period{ 2020y / April / 1d, 2020y / April / 30d },
 				{}
 			}
 		};
 
-		EXPECT_EQ(2020y / April / 16d, make_effective(2020y / April / 23d, weeks(1), &calendar::Preceding, publication));
+		EXPECT_EQ(2020y / April / 16d, make_effective(2020y / April / 23d, weeks(1), &Preceding, publication));
 	}
 
 	TEST(compounded_rate, make_effective2)
 	{
-		const auto publication = calendar::calendar{
-			calendar::SaturdaySundayWeekend,
-			calendar::schedule{
-				calendar::period{ 2020y / April / 1d, 2020y / May / 31d },
+		const auto publication = calendar{
+			SaturdaySundayWeekend,
+			schedule{
+				period{ 2020y / April / 1d, 2020y / May / 31d },
 				{}
 			}
 		};
 
-		EXPECT_EQ(2020y / April / 24d, make_effective(2020y / May / 25d, months(1), &calendar::ModifiedPreceding, publication));
+		EXPECT_EQ(2020y / April / 24d, make_effective(2020y / May / 25d, months(1), &ModifiedPreceding, publication));
 	}
 
 	TEST(compounded_rate, make_effective3)
 	{
-		const auto publication = calendar::calendar{
-			calendar::SaturdaySundayWeekend,
-			calendar::schedule{
-				calendar::period{ 2018y / December / 1d, 2019y / February / 28d },
+		const auto publication = calendar{
+			SaturdaySundayWeekend,
+			schedule{
+				period{ 2018y / December / 1d, 2019y / February / 28d },
 				{ 2019y / January / 1d }, // all other holidays do not matter for this specific example
 			}
 		};
 
-		EXPECT_EQ(2019y / January / 2d, make_effective(2019y / February / 1d, months(1), &calendar::ModifiedPreceding, publication));
+		EXPECT_EQ(2019y / January / 2d, make_effective(2019y / February / 1d, months(1), &ModifiedPreceding, publication));
 	}
 
 
 	TEST(compounded_rate, make_effective_eom2)
 	{
-		const auto publication = calendar::calendar{
-			calendar::SaturdaySundayWeekend,
-			calendar::schedule{
-				calendar::period{ 2020y / February / 1d, 2020y / March / 31d },
+		const auto publication = calendar{
+			SaturdaySundayWeekend,
+			schedule{
+				period{ 2020y / February / 1d, 2020y / March / 31d },
 				{},
 			}
 		};
 
-		EXPECT_EQ(2020y / February / 28d, make_effective(2020y / March / 31d, months(1), &calendar::ModifiedPreceding, publication));
+		EXPECT_EQ(2020y / February / 28d, make_effective(2020y / March / 31d, months(1), &ModifiedPreceding, publication));
 	}
 
 	TEST(compounded_rate, make_effective_eom1)
 	{
-		const auto publication = calendar::calendar{
-			calendar::SaturdaySundayWeekend,
-			calendar::schedule{
-				calendar::period{ 2022y / June / 1d, 2022y / July / 31d },
+		const auto publication = calendar{
+			SaturdaySundayWeekend,
+			schedule{
+				period{ 2022y / June / 1d, 2022y / July / 31d },
 				{},
 			}
 		};
 
-		EXPECT_EQ(2022y / June / 30d, make_effective(2022y / July / 31d, months(1), &calendar::ModifiedPreceding, publication));
+		EXPECT_EQ(2022y / June / 30d, make_effective(2022y / July / 31d, months(1), &ModifiedPreceding, publication));
 	}
 
 	// check if EOM definition in the SIX document makes sense
@@ -117,8 +118,8 @@ namespace risk_free_rate
 		// The end date falls on the last business day of the month. The
 		// start date is moved to the last business day of a month.
 
-		const auto publication = calendar::calendar{
-			calendar::SaturdaySundayWeekend,
+		const auto publication = calendar{
+			SaturdaySundayWeekend,
 			make_SIX_holiday_schedule()
 		};
 
@@ -134,8 +135,8 @@ namespace risk_free_rate
 	{
 		// Unique allocation according to the money market calendar.
 
-		const auto publication = calendar::calendar{
-			calendar::SaturdaySundayWeekend,
+		const auto publication = calendar{
+			SaturdaySundayWeekend,
 			make_SIX_holiday_schedule()
 		};
 
@@ -153,8 +154,8 @@ namespace risk_free_rate
 		// calendar.leading to the end date 08.10.2018.The earlier date
 		// 06.09.2018 will be selected.
 
-		const auto publication = calendar::calendar{
-			calendar::SaturdaySundayWeekend,
+		const auto publication = calendar{
+			SaturdaySundayWeekend,
 			make_SIX_holiday_schedule()
 		};
 
@@ -172,8 +173,8 @@ namespace risk_free_rate
 		// calendar, leading to the end date 23.04.2018.The middle date
 		// 22.03.2018 will be selected.
 
-		const auto publication = calendar::calendar{
-			calendar::SaturdaySundayWeekend,
+		const auto publication = calendar{
+			SaturdaySundayWeekend,
 			make_SIX_holiday_schedule()
 		};
 
@@ -192,8 +193,8 @@ namespace risk_free_rate
 
 		// (probably typo in SIX document)
 
-		const auto publication = calendar::calendar{
-			calendar::SaturdaySundayWeekend,
+		const auto publication = calendar{
+			SaturdaySundayWeekend,
 			make_SIX_holiday_schedule()
 		};
 
@@ -211,8 +212,8 @@ namespace risk_free_rate
 
 	TEST(compounded_rate, compound)
 	{
-		const auto resets_period = calendar::period{ 2018y / April / 2d, 2018y / April / 6d };
-		const auto index_period = calendar::period{ 2018y / April / 2d, 2018y / April / 9d };
+		const auto resets_period = period{ 2018y / April / 2d, 2018y / April / 6d };
+		const auto index_period = period{ 2018y / April / 2d, 2018y / April / 9d };
 
 		auto ts = resets::storage{ resets_period };
 		ts[2018y / April / 2d] = 1.80;
@@ -222,9 +223,9 @@ namespace risk_free_rate
 		ts[2018y / April / 6d] = 1.75;
 
 		const auto r = resets{ move(ts), &Actual360 };
-		const auto c = calendar::calendar{
-			calendar::SaturdaySundayWeekend,
-			calendar::schedule{ index_period, {} }
+		const auto c = calendar{
+			SaturdaySundayWeekend,
+			schedule{ index_period, {} }
 		};
 
 		const auto schedule2 = make_compounding_schedule(

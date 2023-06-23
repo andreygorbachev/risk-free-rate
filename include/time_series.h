@@ -48,7 +48,7 @@ namespace risk_free_rate
 		time_series& operator=(const time_series&) = default;
 		time_series& operator=(time_series&&) noexcept = default;
 
-		explicit time_series(calendar::days_period period) noexcept;
+		explicit time_series(gregorian::days_period period) noexcept;
 
 	public:
 
@@ -61,7 +61,7 @@ namespace risk_free_rate
 
 	public:
 
-		auto get_period() const noexcept -> const calendar::days_period&;
+		auto get_period() const noexcept -> const gregorian::days_period&;
 
 	private:
 
@@ -69,7 +69,7 @@ namespace risk_free_rate
 
 	private:
 
-		calendar::days_period _period; // or should we consider other time steps (rather than just daily)?
+		gregorian::days_period _period; // or should we consider other time steps (rather than just daily)?
 
 		std::vector<T> _observations;
 
@@ -78,7 +78,7 @@ namespace risk_free_rate
 
 
 	template<typename T>
-	time_series<T>::time_series(calendar::days_period period) noexcept :
+	time_series<T>::time_series(gregorian::days_period period) noexcept :
 		_period{ std::move(period) },
 		_observations(_index(_period.get_until()) + 1/*uz*/)
 	{
@@ -99,7 +99,7 @@ namespace risk_free_rate
 
 
 	template<typename T>
-	auto time_series<T>::get_period() const noexcept -> const calendar::days_period&
+	auto time_series<T>::get_period() const noexcept -> const gregorian::days_period&
 	{
 		return _period;
 	}

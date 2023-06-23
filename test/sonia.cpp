@@ -41,7 +41,7 @@
 
 using namespace coupon_schedule;
 
-//using namespace calendar;
+using namespace gregorian;
 
 using namespace std;
 using namespace std::chrono;
@@ -60,9 +60,9 @@ namespace risk_free_rate
 
 		const auto r = resets{ move(ts), &Actual365Fixed };
 		const auto from = 2018y / April / 23d;
-		const auto publication = calendar::calendar{
-			calendar::SaturdaySundayWeekend,
-			calendar::parser::parse_ics(EnglandAndWalesICS)
+		const auto publication = calendar{
+			SaturdaySundayWeekend,
+			parser::parse_ics(EnglandAndWalesICS)
 		};
 		const auto decimal_places = 8u;
 		const auto ci = make_compounded_index(

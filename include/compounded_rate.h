@@ -59,8 +59,8 @@ namespace risk_free_rate
 	auto make_maturity(
 		const std::chrono::year_month_day& effective,
 		const T& term,
-		const calendar::business_day_convention* const convention,
-		const calendar::calendar& publication
+		const gregorian::business_day_convention* const convention,
+		const gregorian::calendar& publication
 	) -> std::chrono::year_month_day
 	{
 		auto result = effective + term;
@@ -76,8 +76,8 @@ namespace risk_free_rate
 	inline auto make_maturity(
 		const std::chrono::year_month_day& effective,
 		const std::chrono::weeks& term,
-		const calendar::business_day_convention* const convention,
-		const calendar::calendar& publication
+		const gregorian::business_day_convention* const convention,
+		const gregorian::calendar& publication
 	) -> std::chrono::year_month_day
 	{
 		auto result = std::chrono::year_month_day{
@@ -93,8 +93,8 @@ namespace risk_free_rate
 	auto make_effective(
 		const std::chrono::year_month_day& maturity,
 		const T& term,
-		const calendar::business_day_convention* const convention,
-		const calendar::calendar& publication
+		const gregorian::business_day_convention* const convention,
+		const gregorian::calendar& publication
 	) -> std::chrono::year_month_day
 	{
 		auto result = maturity - term;
@@ -110,8 +110,8 @@ namespace risk_free_rate
 	inline auto make_effective(
 		const std::chrono::year_month_day& maturity,
 		const std::chrono::weeks& term,
-		const calendar::business_day_convention* const convention,
-		const calendar::calendar& publication
+		const gregorian::business_day_convention* const convention,
+		const gregorian::calendar& publication
 	) -> std::chrono::year_month_day
 	{
 		auto result = std::chrono::year_month_day{
@@ -139,7 +139,7 @@ namespace risk_free_rate
 		for (const auto& p : periods)
 			c *= 1.0 + resets[p._reset] * dc->fraction(p._period);
 
-		const auto full_period = calendar::period{
+		const auto full_period = gregorian::period{
 			periods.front()._period.get_from(),
 			periods.back()._period.get_until()
 		};
@@ -160,8 +160,8 @@ namespace risk_free_rate
 		const T& term,
 		const resets& r,
 		std::chrono::year_month_day from,
-		const calendar::business_day_convention* const convention,
-		const calendar::calendar& publication,
+		const gregorian::business_day_convention* const convention,
+		const gregorian::calendar& publication,
 		const unsigned decimal_places
 	) -> resets
 	{
@@ -169,7 +169,7 @@ namespace risk_free_rate
 
 		auto until = coupon_schedule::make_overnight_maturity(last_reset_ymd, publication);
 
-		auto from_until = calendar::days_period{ std::move(from), std::move(until) };
+		auto from_until = gregorian::days_period{ std::move(from), std::move(until) };
 
 		auto result = resets::storage{ std::move(from_until) };
 
@@ -198,9 +198,9 @@ namespace risk_free_rate
 			}
 		}
 
-		const auto day_count = r.get_day_count();
+		const auto resets_day_count = r.get_day_count();
 
-		return resets{ std::move(result), day_count }; // we assume that resets day count and rate day count are the same
+		return resets{ std::move(result), resets_day_count }; // we assume that resets day count and rate day count are the same
 	}
 
 }

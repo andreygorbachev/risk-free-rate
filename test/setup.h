@@ -40,39 +40,44 @@
 #include <optional>
 #include <cmath>
 
+using namespace gregorian;
+
+using namespace std;
+using namespace std::chrono;
+
 
 namespace rapidcsv
 {
 
 	template<>
-	inline void Converter<std::chrono::year_month_day>::ToVal(const std::string& str, std::chrono::year_month_day& val) const
+	inline void Converter<year_month_day>::ToVal(const string& str, year_month_day& val) const
 	{
-		auto ss = std::istringstream{ str };
+		auto ss = istringstream{ str };
 
-		ss >> std::chrono::parse("%2d %b %2y", val); // SONIA
+		ss >> parse("%2d %b %2y", val); // SONIA
 
-		if (ss.rdstate() == std::ios_base::failbit)
+		if (ss.rdstate() == ios_base::failbit)
 		{
-			ss = std::istringstream{ str };
+			ss = istringstream{ str };
 
-			ss >> std::chrono::parse("%Y-%2m-%2d", val); // EuroSTR
+			ss >> parse("%Y-%2m-%2d", val); // EuroSTR
 		}
 
-		if (ss.rdstate() == std::ios_base::failbit)
+		if (ss.rdstate() == ios_base::failbit)
 		{
-			ss = std::istringstream{ str };
+			ss = istringstream{ str };
 
-			ss >> std::chrono::parse("%2d.%2m.%Y", val); // SARON
+			ss >> parse("%2d.%2m.%Y", val); // SARON
 		}
 	}
 
 	template<>
-	inline void Converter<std::optional<double>>::ToVal(const std::string& str, std::optional<double>& val) const
+	inline void Converter<optional<double>>::ToVal(const string& str, optional<double>& val) const
 	{
 		if(!str.empty())
-			val = std::stod(str); // should probably check pos as well
+			val = stod(str); // should probably check pos as well
 		else
-			val = std::nullopt;
+			val = nullopt;
 	}
 
 }
@@ -108,17 +113,17 @@ namespace risk_free_rate
 
 	inline auto _make_from_until(
 		const rapidcsv::Document& csv,
-		const std::string dateColumnName
-	) -> calendar::days_period
+		const string dateColumnName
+	) -> gregorian::days_period
 	{
 		const auto size = csv.GetRowCount();
 		if (size != 0u)
 		{
 			// we expect observations to be stored in decreasing order (in time)
-			auto from = csv.GetCell<std::chrono::year_month_day>(dateColumnName, size - 1u);
-			auto until = csv.GetCell<std::chrono::year_month_day>(dateColumnName, 0u);
+			auto from = csv.GetCell<year_month_day>(dateColumnName, size - 1u);
+			auto until = csv.GetCell<year_month_day>(dateColumnName, 0u);
 
-			return { std::move(from), std::move(until) };
+			return { move(from), move(until) };
 		}
 		else
 		{
@@ -128,9 +133,9 @@ namespace risk_free_rate
 
 
 	inline auto parse_csv(
-		const std::string& fileName,
-		const std::string& dateColumnName,
-		const std::string& observationColumnName,
+		const string& fileName,
+		const string& dateColumnName,
+		const string& observationColumnName,
 		const char separator = ','
 	) -> resets::storage
 	{
@@ -147,15 +152,15 @@ namespace risk_free_rate
 		auto from_until = _make_from_until(csv, dateColumnName);
 
 		auto ts = resets::storage{
-			std::move(from_until),
+			move(from_until),
 		};
 
 		const auto size = csv.GetRowCount();
 		for (auto i = 0u; i < size; ++i)
 		{
 			// we expect each row to contain date,observation
-			const auto date = csv.GetCell<std::chrono::year_month_day>(dateColumnName, i);
-			const auto observation = csv.GetCell<std::optional<double>>(observationColumnName, i);
+			const auto date = csv.GetCell<year_month_day>(dateColumnName, i);
+			const auto observation = csv.GetCell<optional<double>>(observationColumnName, i);
 
 			if(observation)
 				ts[date] = observation; // or should [] work with optional<double>, rather than double? (some functionality for both?)
@@ -169,51 +174,51 @@ namespace risk_free_rate
 	constexpr auto EnglandAndWalesICS = "england-and-wales.ics";
 
 
-	inline auto make_TARGET2_holiday_schedule() -> calendar::schedule
+	inline auto make_TARGET2_holiday_schedule() -> schedule
 	{
 		// from https://www.ecb.europa.eu/paym/target/target2/profuse/calendar/html/index.en.html
 
-		const auto LaborDay = calendar::named_holiday{ std::chrono::May / std::chrono::day{ 1u } }; // should it be in calendar?
+		const auto LaborDay = named_holiday{ May / 1d }; // should it be in calendar?
 
-		auto rules = calendar::annual_holiday_storage{};
-		rules.insert(&calendar::NewYearsDay);
-		rules.insert(&calendar::GoodFriday);
-		rules.insert(&calendar::EasterMonday);
+		auto rules = annual_holiday_storage{};
+		rules.insert(&NewYearsDay);
+		rules.insert(&GoodFriday);
+		rules.insert(&EasterMonday);
 		rules.insert(&LaborDay);
-		rules.insert(&calendar::ChristmasDay);
-		rules.insert(&calendar::BoxingDay);
+		rules.insert(&ChristmasDay);
+		rules.insert(&BoxingDay);
 
-		return calendar::make_holiday_schedule(
-			{ std::chrono::year{ 2002 }, std::chrono::year{ 2023 } },
+		return make_holiday_schedule(
+			{ 2002y, 2023y },
 			rules
 		);
 	}
 
 
-	inline auto make_SIX_holiday_schedule() -> calendar::schedule
+	inline auto make_SIX_holiday_schedule() -> schedule
 	{
 		// from https://www.six-group.com/en/products-services/the-swiss-stock-exchange/market-data/news-tools/trading-currency-holiday-calendar.html#/
 
-		const auto BerchtoldDay = calendar::offset_holiday<calendar::named_holiday>{ calendar::NewYearsDay, std::chrono::days{ 1 } };
-		const auto LaborDay = calendar::named_holiday{ std::chrono::May / std::chrono::day{ 1u } }; // should it be in calendar?
-		const auto NationalDay = calendar::named_holiday{ std::chrono::August / std::chrono::day{ 1u } };
+		const auto BerchtoldDay = offset_holiday<named_holiday>{ NewYearsDay, days{ 1 } };
+		const auto LaborDay = named_holiday{ May / 1d }; // should it be in calendar?
+		const auto NationalDay = named_holiday{ August / 1d };
 
-		auto rules = calendar::annual_holiday_storage{};
-		rules.insert(&calendar::NewYearsDay);
+		auto rules = annual_holiday_storage{};
+		rules.insert(&NewYearsDay);
 		rules.insert(&BerchtoldDay);
-		rules.insert(&calendar::GoodFriday);
-		rules.insert(&calendar::EasterMonday);
+		rules.insert(&GoodFriday);
+		rules.insert(&EasterMonday);
 		rules.insert(&LaborDay);
-		rules.insert(&calendar::AscensionDay);
-		rules.insert(&calendar::Whitmonday);
+		rules.insert(&AscensionDay);
+		rules.insert(&Whitmonday);
 		rules.insert(&NationalDay);
-//		rules.insert(&calendar::ChristmasEve);
-		rules.insert(&calendar::ChristmasDay);
-		rules.insert(&calendar::BoxingDay); // should it be called it St. Stephen's Day?
-//		rules.insert(&calendar::NewYearsEve);
+//		rules.insert(&ChristmasEve);
+		rules.insert(&ChristmasDay);
+		rules.insert(&BoxingDay); // should it be called it St. Stephen's Day?
+//		rules.insert(&NewYearsEve);
 
-		return calendar::make_holiday_schedule(
-			{ std::chrono::year{ 1999 }, std::chrono::year{ 2024 } },
+		return make_holiday_schedule(
+			{ 1999y, 2024y },
 			rules
 		);
 	}

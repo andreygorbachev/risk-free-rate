@@ -42,7 +42,7 @@ namespace risk_free_rate
 	inline auto make_compounded_index( // should it be make_compounded_index_resets?
 		const resets& r,
 		std::chrono::year_month_day from,
-		const calendar::calendar& publication,
+		const gregorian::calendar& publication,
 		const unsigned decimal_places,
 		const double starting_value = 100.0 // alternatively we can rebalance everything for 1.0
 	) -> resets
@@ -60,7 +60,7 @@ namespace risk_free_rate
 		// hence we need to use publication_calendar to add 1 business day to the latest reset date
 		auto until = coupon_schedule::make_overnight_maturity(last_reset_ymd, publication);
 
-		auto from_until = calendar::days_period{ std::move(from), std::move(until) };
+		auto from_until = gregorian::days_period{ std::move(from), std::move(until) };
 
 		auto result = resets::storage{ std::move(from_until) };
 
@@ -92,7 +92,7 @@ namespace risk_free_rate
 	inline auto make_compounded_index2(
 		const resets& r,
 		std::chrono::year_month_day from,
-		const calendar::calendar& publication,
+		const gregorian::calendar& publication,
 		const unsigned decimal_places,
 		const double starting_value = 100.0 // alternatively we can rebalance everything for 1.0
 	) -> resets
@@ -111,7 +111,7 @@ namespace risk_free_rate
 		// hence we need to use publication_calendar to add 1 business day to the latest reset date
 		auto until = coupon_schedule::make_overnight_maturity(last_reset_ymd, publication);
 
-		auto from_until = calendar::days_period{ std::move(from), std::move(until) };
+		auto from_until = gregorian::days_period{ std::move(from), std::move(until) };
 
 		auto result = resets::storage{ std::move(from_until) };
 

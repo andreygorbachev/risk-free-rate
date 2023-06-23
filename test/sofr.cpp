@@ -38,7 +38,7 @@
 
 using namespace coupon_schedule;
 
-//using namespace calendar;
+using namespace gregorian;
 
 using namespace std;
 using namespace std::chrono;
@@ -49,8 +49,8 @@ namespace risk_free_rate
 
 	TEST(sofr, make_compounded_index)
 	{
-		const auto resets_period = calendar::period{ 2018y / April / 2d, 2018y / April / 6d };
-		const auto index_period = calendar::period{ 2018y / April / 2d, 2018y / April / 9d };
+		const auto resets_period = period{ 2018y / April / 2d, 2018y / April / 6d };
+		const auto index_period = period{ 2018y / April / 2d, 2018y / April / 9d };
 
 		auto ts = resets::storage{ resets_period };
 		ts[2018y / April / 2d] = 1.80;
@@ -61,9 +61,9 @@ namespace risk_free_rate
 
 		const auto r = resets{ move(ts), &Actual360 };
 		const auto from = 2018y / April / 2d;
-		const auto publication = calendar::calendar{
-			calendar::SaturdaySundayWeekend,
-			calendar::schedule{ index_period, {} }
+		const auto publication = calendar{
+			SaturdaySundayWeekend,
+			schedule{ index_period, {} }
 		};
 		const auto decimal_places = 8u;
 		const auto starting_value = 1.0;

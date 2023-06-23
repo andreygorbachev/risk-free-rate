@@ -41,7 +41,7 @@
 
 using namespace coupon_schedule;
 
-//using namespace calendar;
+using namespace gregorian;
 
 using namespace std;
 using namespace std::chrono;
@@ -63,8 +63,8 @@ namespace risk_free_rate
 
 		const auto r = resets{ move(ts), &Actual360 };
 		const auto from = 1999y / June / 30d;
-		const auto publication = calendar::calendar{
-			calendar::SaturdaySundayWeekend,
+		const auto publication = calendar{
+			SaturdaySundayWeekend,
 			move(hs)
 		};
 		const auto decimal_places = 6u;
@@ -113,8 +113,8 @@ namespace risk_free_rate
 
 		const auto r = resets{ move(ts), &Actual360 };
 		const auto from = 1999y / June / 30d;
-		const auto publication = calendar::calendar{
-			calendar::SaturdaySundayWeekend,
+		const auto publication = calendar{
+			SaturdaySundayWeekend,
 			move(hs)
 		};
 		const auto decimal_places = 6u;
@@ -153,8 +153,8 @@ namespace risk_free_rate
 	TEST(saron, start_date_1m)
 	{
 		auto hs = make_SIX_holiday_schedule();
-		const auto publication = calendar::calendar{
-			calendar::SaturdaySundayWeekend,
+		const auto publication = calendar{
+			SaturdaySundayWeekend,
 			move(hs)
 		};
 
@@ -203,9 +203,9 @@ namespace risk_free_rate
 		const auto term = weeks{ 1 };
 		const auto r = resets{ move(ts), &Actual360 };
 		const auto from = 2000y / June / 23d;
-		const auto convention = &calendar::Preceding;
-		const auto publication = calendar::calendar{
-			calendar::SaturdaySundayWeekend,
+		const auto convention = &Preceding;
+		const auto publication = calendar{
+			SaturdaySundayWeekend,
 			move(hs)
 		};
 		const auto decimal_places = 4u;

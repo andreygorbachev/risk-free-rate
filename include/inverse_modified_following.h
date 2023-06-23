@@ -38,7 +38,7 @@ namespace risk_free_rate
 {
 
 	// is this something specific to SARON's compounded rates? (if yes should the name reflect that?)
-	class inverse_modified_following final : public calendar::business_day_convention
+	class inverse_modified_following final : public gregorian::business_day_convention
 	{
 
 	public:
@@ -50,7 +50,7 @@ namespace risk_free_rate
 
 	private:
 
-		virtual auto _adjust(const std::chrono::year_month_day& ymd, const calendar::calendar& cal) const noexcept -> std::chrono::year_month_day final;
+		virtual auto _adjust(const std::chrono::year_month_day& ymd, const gregorian::calendar& cal) const noexcept -> std::chrono::year_month_day final;
 
 	private:
 
@@ -85,7 +85,7 @@ namespace risk_free_rate
 
 
 	// are we relying on consistency of how ymd was calculated and _maturity/_term, etc?
-	inline auto inverse_modified_following::_adjust(const std::chrono::year_month_day& ymd, const calendar::calendar& cal) const noexcept -> std::chrono::year_month_day
+	inline auto inverse_modified_following::_adjust(const std::chrono::year_month_day& ymd, const gregorian::calendar& cal) const noexcept -> std::chrono::year_month_day
 	{
 		// If the end date falls on the last business day of a month, the start date must also be the last business day of a month.
 		if (_maturity == cal.last_business_day({ _maturity.year(), _maturity.month() }))
@@ -100,7 +100,7 @@ namespace risk_free_rate
 		)
 		{
 			if(cal.is_business_day(d))
-				if(make_maturity(d, _term, &calendar::ModifiedFollowing, cal) == _maturity)
+				if(make_maturity(d, _term, &gregorian::ModifiedFollowing, cal) == _maturity)
 					es.push_back(d);
 		}
 
@@ -109,7 +109,7 @@ namespace risk_free_rate
 			// business day preceding the calculated start date will be the used as the start date, unless this new start date
 			// would fall in a different month.In this case, the following business day will be used as the start date and not the
 			// previous business day.
-			return calendar::ModifiedPreceding.adjust(ymd, cal);
+			return gregorian::ModifiedPreceding.adjust(ymd, cal);
 		else
 			if (es.size() == 1u)
 				// If the date is unique according to the CHF money market calendar, it will be used as the start date.
