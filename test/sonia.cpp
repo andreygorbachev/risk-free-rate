@@ -60,10 +60,11 @@ namespace risk_free_rate
 
 		const auto r = resets{ move(ts), &Actual365Fixed };
 		const auto from = 2018y / April / 23d;
-		const auto publication = calendar{
+		auto publication = calendar{
 			SaturdaySundayWeekend,
-			parser::parse_ics(EnglandAndWalesICS)
+			make_england_holiday_schedule()
 		};
+		publication.substitute(&Following);
 		const auto decimal_places = 8u;
 		const auto ci = make_compounded_index(
 			r,
