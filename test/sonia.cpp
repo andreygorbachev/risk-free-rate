@@ -93,11 +93,13 @@ namespace risk_free_rate
 			// Index was not republished.To ensure the integrity of the index, and in line with the
 			// definition of the SONIA Compounded Index set out in the SONIA Key Features& Policies,
 			// the Bank corrected the index calculation for future dates.
-			if(d != 2023y / February / 14d)
+			if (d != 2023y / February / 14d)
 				if (e)
 					EXPECT_EQ(*e, *o);
 				else
 					EXPECT_FALSE(o);
+			else
+				; // we can check the generated number against the manual calcualation for this day
 		}
 	}
 
