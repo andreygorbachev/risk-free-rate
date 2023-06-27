@@ -17,7 +17,6 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(googletest)
 
 add_executable(${PROJECT_NAME}
-  time_series.cpp
   round.cpp
   resets.cpp
   compounded_rate.cpp

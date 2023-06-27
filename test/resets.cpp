@@ -21,9 +21,10 @@
 // SOFTWARE.
 
 #include <resets.h>
-#include <time_series.h>
 
 #include <day_counts.h>
+
+#include <time_series.h>
 
 #include <gtest/gtest.h>
 
@@ -33,6 +34,8 @@
 
 
 using namespace coupon_schedule;
+
+using namespace gregorian;
 
 using namespace std;
 using namespace std::chrono;

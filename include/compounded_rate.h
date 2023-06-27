@@ -22,7 +22,6 @@
 
 #pragma once
 
-#include "time_series.h"
 #include "round.h"
 #include "resets.h"
 
@@ -30,6 +29,7 @@
 #include <coupon_period.h>
 
 #include <period.h>
+#include <time_series.h>
 #include <business_day_conventions.h>
 #include <calendar.h>
 

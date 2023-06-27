@@ -28,6 +28,7 @@
 #include <day_counts.h>
 
 #include <period.h>
+#include <time_series.h>
 #include <weekend.h>
 #include <schedule.h>
 #include <calendar.h>

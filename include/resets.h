@@ -22,9 +22,9 @@
 
 #pragma once
 
-#include "time_series.h"
-
 #include <day_count_interface.h>
+
+#include <time_series.h>
 
 #include <cmath>
 #include <memory>
@@ -52,7 +52,7 @@ namespace risk_free_rate
 
 	public:
 
-		using storage = time_series<std::optional<double>>; // or should we consider some ratio? (s.t. rounding would be explicit)
+		using storage = gregorian::time_series<std::optional<double>>; // or should we consider some ratio? (s.t. rounding would be explicit)
 
 	public:
 

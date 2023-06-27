@@ -22,13 +22,14 @@
 
 #pragma once
 
-#include "time_series.h"
+#include "round.h"
 #include "round.h"
 #include "resets.h"
 
 #include <compounding_schedule.h>
 
 #include <period.h>
+#include <time_series.h>
 #include <business_day_conventions.h>
 #include <calendar.h>
 
