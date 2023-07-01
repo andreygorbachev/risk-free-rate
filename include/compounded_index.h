@@ -22,9 +22,8 @@
 
 #pragma once
 
-#include "round.h"
-#include "round.h"
-#include "resets.h"
+#include <round.h>
+#include <resets.h>
 
 #include <compounding_schedule.h>
 

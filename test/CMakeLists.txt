@@ -18,8 +18,6 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(googletest)
 
 add_executable(${PROJECT_NAME}
-  round.cpp
-  resets.cpp
   compounded_rate.cpp
   sonia.cpp
   sofr.cpp
@@ -32,6 +30,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
   risk-free-rate
   Calendar::calendar
   CouponSchedule::coupon-schedule
+  Reset::reset
   rapidcsv
   GTest::gtest_main
 )

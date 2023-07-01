@@ -8,6 +8,7 @@ set(CMAKE_CXX_EXTENSIONS Off)
 
 find_package(Calendar)
 find_package(CouponSchedule)
+find_package(Reset)
 
 enable_testing()
 

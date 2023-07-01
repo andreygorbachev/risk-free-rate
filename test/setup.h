@@ -22,7 +22,7 @@
 
 #pragma once
 
-#include "resets.h"
+#include <resets.h>
 
 #include <period.h>
 #include <time_series.h>
