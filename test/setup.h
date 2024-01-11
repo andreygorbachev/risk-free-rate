@@ -178,15 +178,16 @@ namespace risk_free_rate
 		const auto SpringBankHoliday = weekday_last_holiday{ std::chrono::May / std::chrono::Monday[std::chrono::last] };
 		const auto SummerBankHoliday = weekday_last_holiday{ std::chrono::August / std::chrono::Monday[std::chrono::last] };
 
-		auto rules = annual_holiday_storage{};
-		rules.insert(&NewYearsDay);
-		rules.insert(&GoodFriday);
-		rules.insert(&EasterMonday);
-		rules.insert(&EarlyMayBankHoliday);
-		rules.insert(&SpringBankHoliday);
-		rules.insert(&SummerBankHoliday);
-		rules.insert(&ChristmasDay);
-		rules.insert(&BoxingDay);
+		const auto rules = annual_holiday_storage{
+			&NewYearsDay,
+			&GoodFriday,
+			&EasterMonday,
+			&EarlyMayBankHoliday,
+			&SpringBankHoliday,
+			&SummerBankHoliday,
+			&ChristmasDay,
+			&BoxingDay
+		};
 
 		const auto hs2018_2019 = make_holiday_schedule(
 			{ std::chrono::year{ 2018 }, std::chrono::year{ 2019 } },
@@ -195,15 +196,16 @@ namespace risk_free_rate
 
 		const auto VictoryInEuropeDay = named_holiday{ std::chrono::May / std::chrono::day{ 8u } };
 
-		auto rules2020 = annual_holiday_storage{};
-		rules2020.insert(&NewYearsDay);
-		rules2020.insert(&GoodFriday);
-		rules2020.insert(&EasterMonday);
-		rules2020.insert(&VictoryInEuropeDay);
-		rules2020.insert(&SpringBankHoliday);
-		rules2020.insert(&SummerBankHoliday);
-		rules2020.insert(&ChristmasDay);
-		rules2020.insert(&BoxingDay);
+		const auto rules2020 = annual_holiday_storage{
+			&NewYearsDay,
+			&GoodFriday,
+			&EasterMonday,
+			&VictoryInEuropeDay,
+			&SpringBankHoliday,
+			&SummerBankHoliday,
+			&ChristmasDay,
+			&BoxingDay
+		};
 
 		const auto hs2020 = make_holiday_schedule(
 			std::chrono::year{ 2020 },
@@ -219,17 +221,18 @@ namespace risk_free_rate
 		const auto PlatinumJubileeHoliday = named_holiday{ std::chrono::June / std::chrono::day{ 3u } };
 		const auto StateFuneral = named_holiday{ std::chrono::September / std::chrono::day{ 19u } }; // Bank Holiday for the State Funeral of Queen Elizabeth II
 
-		auto rules2022 = annual_holiday_storage{};
-		rules2022.insert(&NewYearsDay);
-		rules2022.insert(&GoodFriday);
-		rules2022.insert(&EasterMonday);
-		rules2022.insert(&EarlyMayBankHoliday);
-		rules2022.insert(&SpringBankHoliday2);
-		rules2022.insert(&PlatinumJubileeHoliday);
-		rules2022.insert(&SummerBankHoliday);
-		rules2022.insert(&StateFuneral);
-		rules2022.insert(&ChristmasDay);
-		rules2022.insert(&BoxingDay);
+		const auto rules2022 = annual_holiday_storage{
+			&NewYearsDay,
+			&GoodFriday,
+			&EasterMonday,
+			&EarlyMayBankHoliday,
+			&SpringBankHoliday,
+			&PlatinumJubileeHoliday,
+			&SummerBankHoliday,
+			&StateFuneral,
+			&ChristmasDay,
+			&BoxingDay
+		};
 
 		const auto hs2022 = make_holiday_schedule(
 			std::chrono::year{ 2022 },
@@ -238,16 +241,18 @@ namespace risk_free_rate
 
 		const auto Coronation = named_holiday{ std::chrono::May / std::chrono::day{ 8u } }; // Bank holiday for the coronation of King Charles III
 
-		auto rules2023 = annual_holiday_storage{};
-		rules2023.insert(&NewYearsDay);
-		rules2023.insert(&GoodFriday);
-		rules2023.insert(&EasterMonday);
-		rules2023.insert(&EarlyMayBankHoliday);
-		rules2023.insert(&Coronation);
-		rules2023.insert(&SpringBankHoliday);
-		rules2023.insert(&SummerBankHoliday);
-		rules2023.insert(&ChristmasDay);
-		rules2023.insert(&BoxingDay);
+		const auto rules2023 = annual_holiday_storage{
+			&NewYearsDay,
+			&GoodFriday,
+			&EasterMonday,
+			&EarlyMayBankHoliday,
+			&Coronation,
+			&VictoryInEuropeDay,
+			&SpringBankHoliday,
+			&SummerBankHoliday,
+			&ChristmasDay,
+			&BoxingDay
+		};
 
 		const auto hs2023 = make_holiday_schedule(
 			std::chrono::year{ 2023 },
@@ -269,13 +274,14 @@ namespace risk_free_rate
 
 		const auto LaborDay = named_holiday{ May / 1d }; // should it be in calendar?
 
-		auto rules = annual_holiday_storage{};
-		rules.insert(&NewYearsDay);
-		rules.insert(&GoodFriday);
-		rules.insert(&EasterMonday);
-		rules.insert(&LaborDay);
-		rules.insert(&ChristmasDay);
-		rules.insert(&BoxingDay);
+		const auto rules = annual_holiday_storage{
+			&NewYearsDay,
+			&GoodFriday,
+			&EasterMonday,
+			&LaborDay,
+			&ChristmasDay,
+			&BoxingDay
+		};
 
 		return make_holiday_schedule(
 			{ 2002y, 2023y },
@@ -292,19 +298,20 @@ namespace risk_free_rate
 		const auto LaborDay = named_holiday{ May / 1d }; // should it be in calendar?
 		const auto NationalDay = named_holiday{ August / 1d };
 
-		auto rules = annual_holiday_storage{};
-		rules.insert(&NewYearsDay);
-		rules.insert(&BerchtoldDay);
-		rules.insert(&GoodFriday);
-		rules.insert(&EasterMonday);
-		rules.insert(&LaborDay);
-		rules.insert(&AscensionDay);
-		rules.insert(&Whitmonday);
-		rules.insert(&NationalDay);
-//		rules.insert(&ChristmasEve);
-		rules.insert(&ChristmasDay);
-		rules.insert(&BoxingDay); // should it be called it St. Stephen's Day?
-//		rules.insert(&NewYearsEve);
+		const auto rules = annual_holiday_storage{
+			&NewYearsDay,
+			&BerchtoldDay,
+			&GoodFriday,
+			&EasterMonday,
+			&LaborDay,
+			&AscensionDay,
+			&WhitMonday,
+			&NationalDay,
+//			&ChristmasEve,
+			&ChristmasDay,
+			&BoxingDay, // should it be called it St. Stephen's Day?
+//			&NewYearsEve
+		};
 
 		return make_holiday_schedule(
 			{ 1999y, 2024y },

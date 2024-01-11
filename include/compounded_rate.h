@@ -185,7 +185,7 @@ namespace risk_free_rate
 
 			if (effective >= from) // this also means that we can have resets "from" well in advance of actual first reset
 			{
-				const auto coupon_period = coupon_schedule::coupon_period{ { effective, maturity }, maturity };
+				const auto coupon_period = coupon_schedule::coupon_period{ { effective, maturity }, maturity, maturity };
 
 				const auto schedule = coupon_schedule::make_compounding_schedule(coupon_period, publication);
 

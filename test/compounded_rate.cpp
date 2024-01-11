@@ -229,7 +229,7 @@ namespace risk_free_rate
 		};
 
 		const auto schedule2 = make_compounding_schedule(
-			{ { 2018y / April / 2d, 2018y / April / 3d }, 2018y / April / 3d },
+			{ { 2018y / April / 2d, 2018y / April / 3d }, 2018y / April / 3d, 2018y / April / 3d },
 			c
 		);
 		EXPECT_NEAR(0.018, compound(schedule2, r), 0.000001);
