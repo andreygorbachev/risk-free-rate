@@ -88,8 +88,8 @@ namespace risk_free_rate
 	inline auto inverse_modified_following::_adjust(const std::chrono::year_month_day& ymd, const gregorian::calendar& cal) const noexcept -> std::chrono::year_month_day
 	{
 		// If the end date falls on the last business day of a month, the start date must also be the last business day of a month.
-		if (_maturity == cal.last_business_day({ _maturity.year(), _maturity.month() }))
-			return cal.last_business_day({ ymd.year(), ymd.month() });
+		if (_maturity == make_last_business_day(_maturity.year() / _maturity.month(), cal))
+			return make_last_business_day(ymd.year() / ymd.month(), cal);
 
 		// does it cover all possibilities? (also assuming non SIX calendars)
 		// could it be speed up / simplified?
